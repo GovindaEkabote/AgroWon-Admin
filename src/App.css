@@ -1,0 +1,846 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    font-family: "Roboto", serif;
+    background: #f3f0f0 !important;
+}
+
+::-webkit-scrollbar {
+    width: 5px !important;
+    height: 5px !important;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #0858f7 !important;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+.btn-blue {
+    background: #0858f7 !important;
+    font-size: 14px;
+    text-transform: capitalize !important;
+    font-weight: 600 !important;
+    color: #fff !important;
+    border-radius: 5px !important;
+}
+.btn-lg{
+    padding: 5px 55px !important;
+}
+
+.btn-big{
+    padding: 10px 25px !important;
+    font-size: 16px !important;
+}
+
+.btn-round{
+     border-radius: 30px !important;
+}
+.full{
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+    width: 100% !important;
+}
+.link{
+    color: #5e5d72;
+    font-weight: 600;
+}
+.link:hover{
+    color: #125be8;
+    text-decoration: none;
+}
+
+.link.color{
+    color: #125be8;
+    text-decoration: none;
+    font-size: 15px !important;
+
+}
+header {
+    width: 100%;
+    height: 70px;
+    background: rgb(255, 255, 255,0.8);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 100;
+    -webkit-backdrop-filter: blur(5px);
+}
+
+header .logo {
+    width: 250px;
+    height: 70px;
+}
+
+header button.rounded-circle {
+    min-width: 40px !important;
+    width: 40px !important;
+    height: 40px !important;
+    background: #f0f5ff !important;
+    color: #0858f7;
+
+}
+
+header button.rounded-circle svg {
+    color: #292929;
+    font-size: 18px !important;
+    transition: all 0.2s ease-in-out;
+}
+
+header button.rounded-circle:hover svg {
+    color: #0858f7 !important;
+}
+
+header .part2{
+    padding-left: 50px !important; 
+}
+
+.searchBox {
+    width: 400px;
+    height: 40px;
+    background: #f0f5ff !important;
+    border-radius: 6px !important;
+    padding: 3px 15px;
+}
+
+.searchBox input {
+    background: transparent;
+    border: 0px;
+    outline: none;
+    padding-left: 0px;
+    width: 100%;
+    font-size: 14px;
+    color: #292929;
+}
+
+.searchBox input::-webkit-input-placeholder {
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.searchBox svg {
+    font-size: 18px;
+    color: #444444 !important;
+}
+
+.myAcc {
+    text-align: left !important;
+    color: #0858f7 !important;
+    /* text-transform: capitalize; */
+}
+
+.userImg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #0858f7;
+    padding: 2px;
+    border-radius: 100%;
+    background: #9df478 !important;
+
+}
+
+.userImg .rounded-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    position: relative;
+
+}
+
+.userImg .rounded-circle img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.myAcc .userInfo {
+    padding-left: 10px;
+}
+
+.myAcc .userInfo h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 0px;
+    text-transform: capitalize;
+    color: #000000;
+
+}
+
+.myAcc .userInfo p {
+    margin-top: 0px;
+    font-size: 12px;
+    color: #000000;
+    opacity: 0.7;
+    text-transform: lowercase;
+}
+
+#account-menu li {
+    font-size: 14px !important;
+    padding: 5px 15px;
+}
+
+#account-menu li svg {
+    font-size: 20px !important;
+}
+
+#notifications .MuiPaper-elevation {
+    right: 240px !important;
+    width: 300px;
+    left: auto !important;
+    top: 70px !important;
+}
+
+.dropdown_list .head {
+    padding: 10px 0px;
+}
+
+.dropdown_list .head h4 {
+    font-size: 17px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.dropdown_list li.MuiButtonBase-root {
+    background: #ebf6ff !important;
+    color: #000 !important;
+    padding: 10px 15px !important;
+}
+
+.dropdown_list li.MuiButtonBase-root:hover {
+    background: #dde2e7 !important;
+}
+
+.dropdownInfo {
+    padding-left: 15px;
+}
+
+.dropdownInfo h4 {
+    font-size: 13px;
+    font-weight: 500;
+    white-space: break-spaces;
+    line-height: 21px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.dropdownInfo h4 b {
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+.dropdownInfo p {
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 0px !important;
+}
+
+.text-sky {
+    color: #0858f7 !important;
+}
+
+.dropdown_list .scroll {
+    max-height: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.scroll li {
+    margin-top: 3px;
+}
+
+.main .sidebarWrapper {
+    width: 20%;
+    flex: 0 0 20%;
+    transition: all 0.3s;
+}
+
+.main .sidebarWrapper.toggle{
+    width: 0%;
+    flex: 0 0 0%;
+}
+
+.main .sidebarWrapper .sidebar {
+    width: 20%;
+    height: 100vh;
+    position: fixed;
+    top: 70px;
+    left: 0px;
+    background: #fff;
+    max-height: calc(100% - 70px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-bottom: 40px;
+    transition: all 0.3s;
+}
+.main .sidebarWrapper.toggle .sidebar{
+    left: -100%;
+}
+.main .sidebarWrapper .sidebar::-webkit-scrollbar {
+    width: 3px !important;
+}
+
+.main .sidebarWrapper .sidebar::-webkit-scrollbar-thumb {
+    background: transparent !important;
+}
+
+.main .sidebarWrapper:hover .sidebar::-webkit-scrollbar {
+    background: #0858f7 !important;
+}
+
+.main .sidebarWrapper .sidebar ul {
+    margin-bottom: 0px;
+    padding: 10px 15px !important;
+}
+
+.main .sidebarWrapper .sidebar ul li {
+    list-style: none;
+}
+
+.main .sidebarWrapper .sidebar ul li button {
+    color: rgba(0, 0, 0, 0.6) !important;
+    text-align: left;
+    justify-content: left;
+    border-radius: 10px !important;
+    padding: 12px 10px !important;
+    align-items: center;
+    text-transform: capitalize;
+    font-style: 600;
+    font-size: 15px !important;
+}
+
+.main .sidebarWrapper .sidebar ul li button .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    margin-right: 10px !important;
+
+}
+
+.main .sidebarWrapper .sidebar ul li button:hover {
+    background: #ebf6ff !important;
+}
+
+.main .sidebarWrapper .sidebar ul li button.active {
+    background: #ebf6ff !important;
+}
+
+.main .sidebarWrapper .sidebar ul li button.active .arrow {
+    transform: rotate(90deg);
+}
+
+
+.main .sidebarWrapper .sidebar ul li button .icon svg {
+    font-size: 32px;
+}
+
+.main .sidebarWrapper .sidebar ul li button * {
+    color: rgba(0, 0, 0, 0.6) !important;
+}
+
+.main .sidebarWrapper .sidebar ul li button .arrow {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    transition: all 0.3s ease-in-out;
+}
+
+.main .sidebarWrapper .sidebar ul .submenu {
+    padding: 0px 45px !important;
+    position: relative;
+    transition: all 0.3s;
+    height: 0px;
+}
+
+.main .sidebarWrapper .sidebar ul .submenu::before {
+    content: '';
+    width: 1px;
+    height: 95%;
+    position: absolute;
+    top: 0px;
+    left: 25px;
+    background: rgb(0, 0, 0, 0.2);
+}
+
+.main .sidebarWrapper .sidebar ul .submenu li {
+    width: 100%;
+    list-style: none;
+}
+
+.main .sidebarWrapper .sidebar ul .submenu li a {
+    color: rgba(0, 0, 0, 0.6) !important;
+    text-decoration: none;
+    display: block;
+    padding: 6px 2px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    margin-top: 5px;
+
+}
+
+.main .sidebarWrapper .sidebar ul .submenu li a:hover {
+    color: #0858f7 !important;
+    background: #ebf6ff !important;
+    border-radius: 10px !important;
+}
+
+.main .sidebarWrapper .sidebar ul .submenuWrapper {
+    transition: all 0.4s;
+    height: 0px;
+    overflow: hidden;
+}
+
+.main .sidebarWrapper .sidebar ul .submenuWrapper.colapsed {
+    height: 0px;
+}
+
+.main .sidebarWrapper .sidebar ul .submenuWrapper.colapsed .submenu {
+    opacity: 0;
+}
+
+.main .sidebarWrapper .sidebar ul .submenuWrapper.colapse {
+    height: auto;
+    overflow: inherit;
+}
+
+.main .sidebarWrapper .sidebar ul .submenuWrapper.colapse .submenu {
+    opacity: 1;
+    height: auto;
+
+}
+
+.logoutWrapper {
+    padding: 0px 10px;
+}
+
+.logoutWrapper .logoutBox {
+    width: 100%;
+    height: 130px;
+    padding: 25px;
+    background: #bcd2fd;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* -------------------- Logout Orange Circle --------------- */
+.logoutWrapper .logoutBox::before {
+    content: '';
+    width: 80px;
+    height: 80px;
+    background: #f7af08;
+    border-radius: 100%;
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    opacity: 0.5;
+}
+
+/* -------------------- Logout Orange Circle --------------- */
+.logoutWrapper .logoutBox::after {
+    content: '';
+    width: 80px;
+    height: 80px;
+    background: #f78308;
+    border-radius: 100%;
+    position: absolute;
+    bottom: -20px;
+    left: -20px;
+    opacity: 0.5;
+}
+
+.logoutWrapper .logoutBox button {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+.logoutWrapper .logoutBox button svg {
+    margin-right: 5px;
+    font-size: 15px !important;
+}
+
+.right-content {
+    padding: 90px 30px !important;
+    padding-bottom: 10px !important;
+}
+
+.main .content {
+    width: 80%;
+    flex: 0 0 80%;
+    transition: all 0.3s;
+}
+
+.main .content.toggle{
+    width: 100%;
+    flex: 0 0 100%;
+}
+
+.dashboardBoxWrapper {
+    gap: 15px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.dashboardBoxWrapper .dashboardBox {
+    width: 48%;
+    height: 170px;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 20px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    text-align: left !important;
+    position: relative !important;
+    color: #fff;
+    text-transform: capitalize !important;
+    font-weight: 800 !important;
+
+}
+
+.dashboardBoxWrapper .dashboardBox .col1 h4 {
+    font-size: 16px !important;
+    font-weight: 500;
+}
+
+.dashboardBoxWrapper .dashboardBox .col1 span {
+    font-size: 35px !important;
+    font-weight: bold;
+    line-height: 45px !important;
+}
+
+.dashboardBoxWrapper .dashboardBox .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background-image: linear-gradient(to bottom right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.3));
+}
+
+.dashboardBoxWrapper .dashboardBox svg {
+    font-size: 28px !important;
+    opacity: 0.4;
+    color: #e6e4e4;
+}
+
+.dashboardBoxWrapper .dashboardBox .toggleIcon {
+    font-size: 22px !important;
+    color: rgba(0, 0, 0, 0.6) !important;
+    cursor: pointer;
+    min-width: 40px !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+}
+
+.dashboardBoxWrapper .dashboardBox .toggleIcon svg {
+    color: rgb(0, 0, 0) !important;
+}
+
+.dashboardBoxWrapper .dashboardBox .chart {
+    opacity: 0.080;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 0px;
+}
+
+.dashboardBoxWrapper .dashboardBox .chart svg {
+    font-size: 130px !important;
+    color: #000;
+}
+
+.dashboardBoxWrapper .dashboardBox .bottomEle {
+    position: relative;
+    top: 15px !important;
+}
+
+.dashboardBoxWrapperRow .box {
+    width: 100%;
+    height: 100%;
+}
+
+.dashboardBoxWrapper .dashboardBox .MuiButtonBase-root svg {
+    color: #000;
+    font-size: 17px !important;
+    margin-right: 10px !important;
+
+}
+
+.dropdown_menu .MuiButtonBase-root svg {
+    margin-right: 10px !important;
+}
+
+.graphBox {
+    background-image: linear-gradient(#1a50b5, #125be8);
+    border-radius: 10px;
+    border-radius: 25px !important;
+
+}
+
+.toggleIcon {
+    font-size: 22px !important;
+    color: rgba(0, 0, 0, 0.6) !important;
+    cursor: pointer;
+    min-width: 40px !important;
+    width: 40px !important;
+    margin-top: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+}
+
+.toggleIcon svg {
+    color: #fff !important;
+    font-size: 23px !important;
+    opacity: 1 !important;
+}
+
+.graphBox h4 {
+    font-size: 16px !important;
+    font-weight: 600;
+    margin-left: 25px !important;
+    margin-top: 40px !important;
+
+}
+
+.graphBox p {
+    font-size: 13px;
+    opacity: 0.7 !important;
+}
+
+.graphBox .charts svg {
+    font-size: 130px;
+
+}
+
+.card {
+    margin: 20px 0px;
+    border-radius: 10px;
+
+}
+
+.card .hd {
+    font-size: 20px;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #939292;
+}
+
+.cardFilters .col-md-3 h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #000;
+    text-transform: uppercase;
+}
+
+h1,h2,h3,h4,h5,h6,p{
+    color: #403e57;
+}
+.table-responsive::-webkit-scrollbar-thumb{
+    background: #0858f7;
+}
+.table .thead-dark th{
+    background-color: #6495f7 !important;
+    border-color: rgb(255, 255, 255, 0.1) !important;
+    font-size: 14px !important;
+}
+
+.table tbody td{
+    font-size: 14px !important;
+    color: #403e57;
+    font-weight: 500;
+}
+
+.table tbody .actions button{
+    min-width: 28px !important;
+    width: 28px !important;
+    height: 28px !important;
+    margin: 0px 3px !important;
+}
+
+.table tbody .actions button.secondary{
+    background: rgba(203, 60, 231, 0.2) !important;
+}
+
+.table tbody .actions button.success{
+    background: #ccf0bd;
+}
+.table tbody .actions button.error{
+    background: rgb(240, 176, 176) !important;
+}
+.table tbody .actions button svg{
+    font-size: 20px !important;
+}
+
+table.v-align td{
+    vertical-align: middle !important;
+}
+
+.table td .old, .table td .new{
+    display: block;
+    width: 100%;
+}
+table td .info{
+    width: 65%;
+    flex: 0 0 65%;
+}
+table td .imgWrapper{
+    width: 20%;
+    flex: 0 0 20%;
+}
+
+table td .info h6{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.table td .old, .table td .new{
+    display: block;
+    width: 100%;
+}
+
+table td .info p{
+    font-size: 13px;
+    line-height: 18px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #818091;
+    margin-bottom: 0px;
+}
+
+table.v-align td .productBox{
+    width: 270px;
+}
+
+.tableFooter{
+    padding-bottom: 20px !important;
+}
+.tableFooter .pagination{
+    margin-left: auto;
+}
+.tableFooter p{
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 0px;
+}
+
+.loginSection{
+    width: 100%;
+    height: 100vh;
+    padding: 35px 25px;
+    background: #fff;
+    position: relative;
+}
+
+.loginSection .loginBox{
+    width: 400px;
+    height: auto;
+    margin: auto;
+}
+.loginSection .loginBox .wrapper .form-group{
+    margin-bottom: 18px;
+}
+.loginSection .loginBox .wrapper{
+    width: 100%;
+    height: auto;
+    background: #f0f0f0;
+    position: relative;
+    z-index: 100;
+    padding: 35px !important;
+}
+
+.loginSection .loginBox .wrapper .form-control{
+    background: #fff !important;
+    box-shadow: none !important;
+    outline: none;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    font-weight: 600;
+    height: 45px !important;
+    padding-left: 40px !important;
+}
+
+.loginSection .loginBox .wrapper .form-group.focus .icon svg{
+    color: #0858f7 !important;
+}
+.loginSection .loginBox .wrapper .form-control:focus{
+    border: 1px solid blue;
+}
+.loginSection .loginBox .wrapper .form-group .icon{
+    position: absolute;
+    top: 5px;
+    left: 15px;
+    z-index: 100;
+    font-size: 20px;
+}
+.loginSection .loginBox .wrapper .form-group .icon svg{
+    color: #939292;
+}
+
+.toggleShowPassword{
+    position: absolute;
+    top: 10px;
+    right: 8px;
+    cursor: pointer;
+}
+.toggleShowPassword svg{
+    font-size: 21px;
+    color: #5e5d72;
+}
+.loginSection .loginBox .wrapper .link{
+     font-size: 14px;
+}
+
+.loginSection .loginBox .wrapper .or span.line{
+    display: block;
+    width: 35%;
+    height: 1px ;
+    background: rgba(0, 0, 0, 0.3);
+}
+.loginSection .loginBox .wrapper .or span.txt{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    width: 35px;
+    height: 35px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+}
+
+.loginWithGoogle{
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+.loginWithGoogle .icon2 svg{
+    font-size: 25px;
+}
