@@ -17,6 +17,7 @@ import { FaShieldAlt } from "react-icons/fa";
 import { MyContext } from "../../App";
 import { AiOutlineMenuUnfold } from "react-icons/ai";
 import { AiOutlineMenuFold } from "react-icons/ai";
+import UserAvatarImage from "../userAvatarImage";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -70,7 +71,7 @@ const Header = () => {
             </div>
 
             <div className="col-sm-7 d-flex align-items-center justify-content-end part3">
-              <Button className="rounded-circle mr-3">
+              <Button className="rounded-circle mr-3" onClick={() => context.setthemeMode(!context.themeMode)}>
                 <IoSunnyOutline />
               </Button>
               <Button className="rounded-circle mr-3">
@@ -106,11 +107,7 @@ const Header = () => {
                     <MenuItem onClick={handleCloseMyAccDrop}>
                       <div className="d-flex ">
                         <div>
-                          <div className="userImg">
-                            <span className="rounded-circle">
-                              <img src={profile} alt="logo" />
-                            </span>
-                          </div>
+                          <UserAvatarImage  img={profile}/>
                         </div>
                         <div className="dropdownInfo">
                           <h4>

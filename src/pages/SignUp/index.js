@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import logo from "../../assets/images/Logo.png";
 import { MyContext } from "../../App";
 import { MdEmail } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
@@ -8,37 +7,45 @@ import { FaEyeSlash } from "react-icons/fa";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
+import { FaUser } from "react-icons/fa6";
+import { IoShieldCheckmarkSharp } from "react-icons/io5";
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 const SignUp = () => {
     const context = useContext(MyContext);
     const [inputIndex, setInputIndex] = useState(null);
     const [isShowPassword, setIsShowPassword] = useState(false);
-  
+    const [isShowConfirmPassword, setIsShowConfirmPassword] = useState(false); 
+    
     const focusInput = (index) => {
       setInputIndex(index);
     };
   
     useEffect(() => {
       context.setisHideSidebarHeader(true);
+      window.scrollTo(0,0);
+
     }, []);
     return (
       <>
         <section className="loginSection signUpSection">
           <div className="loginBox">
-            <div className="logo text-center">
-              <img src={logo} alt="" width="150px" />
-              <h5 className="font-weight-bold">SignUp To AgroWon</h5>
-            </div>
+            {/* <div className="logo text-center mt-0">
+              {/* <img src={logo} alt="" width="150px" /> */}
+              {/* <h6 className="font-weight-bold">Register New Account for AgroWon</h6> */}
+            {/* </div> */} 
   
-            <div className="wrapper mt-3 card border">
+            <div className="wrapper mt-0 card border">
               <form>
+              <h6 className="font-weight-bold ">Register New Account for AgroWon</h6>
               <div
                   className={`form-group position-relative ${
                     inputIndex === 0 && "focus"
                   }`}
                 >
                   <span className="icon">
-                    <MdEmail />
+                    <FaUser />
                   </span>
                   <input
                     type="text"
@@ -46,11 +53,12 @@ const SignUp = () => {
                     placeholder="Enter Your Name"
                     onFocus={() => focusInput(0)}
                     onBlur={() => setInputIndex(null)}
+                    autoFocus
                   />
                 </div>
                 <div
                   className={`form-group position-relative ${
-                    inputIndex === 0 && "focus"
+                    inputIndex === 1 && "focus"
                   }`}
                 >
                   <span className="icon">
@@ -60,13 +68,13 @@ const SignUp = () => {
                     type="text"
                     className="form-control"
                     placeholder="Enter Your Email"
-                    onFocus={() => focusInput(0)}
+                    onFocus={() => focusInput(1)}
                     onBlur={() => setInputIndex(null)}
                   />
                 </div>
                 <div
                   className={`form-group position-relative ${
-                    inputIndex === 1 && "focus"
+                    inputIndex === 2 && "focus"
                   }`}
                 >
                   <span className="icon">
@@ -76,7 +84,7 @@ const SignUp = () => {
                     type={`${isShowPassword === true ? "text" : "password"}`}
                     className="form-control"
                     placeholder="Enter Your Password"
-                    onFocus={() => focusInput(1)}
+                    onFocus={() => focusInput(2)}
                     onBlur={() => setInputIndex(null)}
                   />
                   <span
@@ -86,16 +94,41 @@ const SignUp = () => {
                     {isShowPassword === true ? <IoEyeSharp /> : <FaEyeSlash />}
                   </span>
                 </div>
-                <div className="form-group">
-                  <Button className="btn-blue btn-lg w-100 btn-big">
-                    Sign In
-                  </Button>
+                <div
+                  className={`form-group position-relative ${
+                    inputIndex === 3 && "focus"
+                  }`}
+                >
+                  <span className="icon">
+                    <IoShieldCheckmarkSharp />
+                  </span>
+                  <input
+                    type={`${isShowConfirmPassword === true ? "text" : "password"}`}
+                    className="form-control"
+                    placeholder="Confirm Your Password"
+                    onFocus={() => focusInput(3)}
+                    onBlur={() => setInputIndex(null)}
+                  />
+                  <span
+                    className="toggleShowPassword"
+                    onClick={() => setIsShowConfirmPassword(!isShowConfirmPassword)}
+                  >
+                    {isShowConfirmPassword === true ? <IoEyeSharp /> : <FaEyeSlash />}
+                  </span>
                 </div>
+                <div className="form-group d-flex align-items-center">
+                  <Button className="btn-blue btn-lg w-100 btn-big mr-2">
+                    Register
+                  </Button>
+                  <Link to={'/'} className="w-100 ml-2"> 
+                  <Button className="btn-blue btn-lg  w-100 btn-big ">
+                    Home
+                  </Button>
+                  </Link>
+                </div>
+                <FormControlLabel control={<Checkbox />} label="I agree to the all Terms & Conditions." size="small" className="mt-0 mb-0" />
                 <div className="form-group text-center mb-0">
-                  {/* <Link to={"/forgot-password"} className="link ">
-                    FORGOT PASSWORD
-                  </Link> */}
-                  <div className="d-flex align-items-center justify-content-center or mt-3 mb-3">
+                  <div className="d-flex align-items-center justify-content-center or mt-2  mb-3">
                     <span className="line"></span>
                     <span className="txt">or</span>
                     <span className="line"></span>
@@ -114,7 +147,7 @@ const SignUp = () => {
               </form>
             </div>
   
-            <div className="wrapper mt-3 card border footer p-2">
+            <div className="wrapper mt-0 card border footer p-2">
               <span className="text-center">
                 already have account?{" "}
                 <Link to={"/login"} className="link color">

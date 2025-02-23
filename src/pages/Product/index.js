@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import DashboardBox from "./components/DashboardBox";
+import DashboardBox from "../Dashboard/components/DashboardBox";
 import { FaRegUser } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
 import { FaBagShopping } from "react-icons/fa6";
@@ -23,10 +23,11 @@ import img from "../../assets/images/Govinda.jpg";
 
 import Pagination from "@mui/material/Pagination";
 import { MyContext } from "../../App";
+import { Link } from "react-router-dom";
 
 const ITEM_HEIGHT = 48;
 
-const Dashboard = () => {
+const Product = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [showBy, setShowBy] = useState("");
   const [showsetCatBy, setCatBy] = useState("");
@@ -74,12 +75,8 @@ const Dashboard = () => {
                 name={"Total Products"}
                 number={27}
               />
-              <DashboardBox
-                color={["#F3797E", "#f2bdbf"]}
-                icon={<WiStars />}
-                name={"Total Reviews"}
-                number={17}
-              />
+              <DashboardBox color={["#F3797E", "#f2bdbf"]} icon={<WiStars />}  name={"Total Reviews"}
+                number={17}/>
             </div>
           </div>
 
@@ -156,9 +153,7 @@ const Dashboard = () => {
                   onChange={(e) => setShowBy(e.target.value)}
                   className="w-100"
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
+                  <MenuItem value="None">None</MenuItem>
                   <MenuItem value={10}>Ten</MenuItem>
                   <MenuItem value={20}>Twenty</MenuItem>
                   <MenuItem value={30}>Thirty</MenuItem>
@@ -182,9 +177,7 @@ const Dashboard = () => {
                   onChange={(e) => setCatBy(e.target.value)}
                   className="w-100"
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
+                  <MenuItem value="None">None</MenuItem>
                   <MenuItem value={10}>Ten</MenuItem>
                   <MenuItem value={20}>Twenty</MenuItem>
                   <MenuItem value={30}>Thirty</MenuItem>
@@ -192,57 +185,57 @@ const Dashboard = () => {
               </FormControl>
             </div>
 
-            <div className="col-md-3">
-              <h4>brand BY</h4>
-              <FormControl
-                sx={{ m: 1, minWidth: 120 }}
-                size="small"
-                className="w-100"
-              >
-                <InputLabel id="demo-simple-select-helper-label"></InputLabel>
-                <Select
-                  inputProps={{ "aria-label": "without label" }}
-                  labelId="demo-simple-select-helper-label"
-                  id="demo-simple-select-helper"
-                  value={showBy}
-                  onChange={(e) => setShowBy(e.target.value)}
+            {/* <div className="col-md-3">
+                <h4>brand BY</h4>
+                <FormControl
+                  sx={{ m: 1, minWidth: 120 }}
+                  size="small"
                   className="w-100"
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
+                  <InputLabel id="demo-simple-select-helper-label"></InputLabel>
+                  <Select
+                    inputProps={{ "aria-label": "without label" }}
+                    labelId="demo-simple-select-helper-label"
+                    id="demo-simple-select-helper"
+                    value={showBy}
+                    onChange={(e) => setShowBy(e.target.value)}
+                    className="w-100"
+                  >
+                    <MenuItem value="">
+                     
+                    </MenuItem>
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                  </Select>
+                </FormControl>
+              </div> */}
 
-            <div className="col-md-3">
-              <h4>SHOW BY</h4>
-              <FormControl
-                sx={{ m: 1, minWidth: 120 }}
-                size="small"
-                className="w-100"
-              >
-                <InputLabel id="demo-simple-select-helper-label"></InputLabel>
-                <Select
-                  inputProps={{ "aria-label": "without label" }}
-                  labelId="demo-simple-select-helper-label"
-                  id="demo-simple-select-helper"
-                  value={showBy}
-                  onChange={(e) => setShowBy(e.target.value)}
+            {/* <div className="col-md-3">
+                <h4>SHOW BY</h4>
+                <FormControl
+                  sx={{ m: 1, minWidth: 120 }}
+                  size="small"
                   className="w-100"
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
+                  <InputLabel id="demo-simple-select-helper-label"></InputLabel>
+                  <Select
+                    inputProps={{ "aria-label": "without label" }}
+                    labelId="demo-simple-select-helper-label"
+                    id="demo-simple-select-helper"
+                    value={showBy}
+                    onChange={(e) => setShowBy(e.target.value)}
+                    className="w-100"
+                  >
+                    <MenuItem value="">
+                      
+                    </MenuItem>
+                    <MenuItem value={10}>Ten</MenuItem>
+                    <MenuItem value={20}>Twenty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem>
+                  </Select>
+                </FormControl>
+              </div> */}
           </div>
 
           <div className="table-responsice mt-3">
@@ -340,15 +333,17 @@ const Dashboard = () => {
                       <span className="new text-danger">$12.5</span>
                     </div>
                   </td>
-                  <td>30</td>
+                  <td>300</td>
                   <td>4.9(16)</td>
                   <td>380</td>
                   <td>38K</td>
                   <td>
                     <div className="actions d-flex align-items-center">
-                      <Button className="secondary" color="secondary">
-                        <LuEyeClosed />
-                      </Button>
+                      <Link to={"/product/details"}>
+                        <Button className="secondary" color="secondary">
+                          <LuEyeClosed />
+                        </Button>
+                      </Link>
                       <Button className="success" color="success">
                         <GiPencil />
                       </Button>
@@ -819,4 +814,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Product;
