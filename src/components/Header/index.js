@@ -5,8 +5,8 @@ import profile from "../../assets/images/Govinda.jpg";
 import { Button, Divider } from "@mui/material";
 import SearchBox from "../SearchBox";
 import { IoSunnyOutline } from "react-icons/io5";
-import { AiOutlineShoppingCart } from "react-icons/ai";
-import { MdOutlineMail } from "react-icons/md";
+// import { AiOutlineShoppingCart } from "react-icons/ai";
+// import { MdOutlineMail } from "react-icons/md";
 import { FaRegBell } from "react-icons/fa6";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -49,11 +49,13 @@ const Header = () => {
           <div className="row d-flex align-items-center w-100">
             {/* Logo */}
             <div className="col-sm-2 part1">
-              <Link className="d-flex align-items-center" to={"/"}>
+              <Link className="d-flex align-items-center  logo" to={"/"}>
                 <img src={logo} alt="logo" className="logo" />
               </Link>
             </div>
 
+          {
+            context.windowWidth > 992 && 
             <div className="col-sm-3 d-flex align-items-center part2">
               <Button
                 className="rounded-circle mr-3"
@@ -69,18 +71,19 @@ const Header = () => {
               </Button>
               <SearchBox />
             </div>
+          }
 
             <div className="col-sm-7 d-flex align-items-center justify-content-end part3">
               <Button className="rounded-circle mr-3" onClick={() => context.setthemeMode(!context.themeMode)}>
                 <IoSunnyOutline />
               </Button>
-              <Button className="rounded-circle mr-3">
+              {/* <Button className="rounded-circle mr-3">
                 <AiOutlineShoppingCart />
               </Button>
 
               <Button className="rounded-circle mr-3">
                 <MdOutlineMail />
-              </Button>
+              </Button> */}
 
               <div className="dropdownWrapper position-relative">
                 <Button
@@ -253,7 +256,7 @@ const Header = () => {
                         <img src={profile} alt="logo" />
                       </span>
                     </div>
-                    <div className="userInfo">
+                    <div className="userInfo res-hide">
                       <h4>Govinda Ekbote</h4>
                       <p className="mb-0 ">@govind786</p>
                     </div>

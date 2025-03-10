@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+
 import Dashboard from "./pages/Dashboard";
 import Header from "./components/Header";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -10,12 +11,14 @@ import SignUp from "./pages/SignUp";
 import Product from "./pages/Product";
 import ProductDetails from "./pages/ProductDetails";
 import ProductUpload from "./pages/ProductUpload"
+import CategoryAdd from "./pages/CategoryAdd";
 const MyContext = createContext();
 
 function App() {
   const [isToggleSlider, setIsToggleSlider] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [isHideSidebarHeader, setisHideSidebarHeader] = useState(false);
+  const [windowWidth,setWindowWidth] = useState(window.innerWidth)
   const [themeMode, setthemeMode] = useState(true);
 
   useEffect(() => {
@@ -29,6 +32,16 @@ function App() {
       localStorage.setItem("themeMode", "dark");
     }
   }, [themeMode]);
+ 
+  useEffect(() =>{
+    const handleResize = () =>{
+      setWindowWidth(window.innerWidth)
+    }
+    window.addEventListener('resize',handleResize);
+    return() =>{
+      window.removeEventListener('resize',handleResize)
+    }
+  },[])
 
   const values = {
     isToggleSlider,
@@ -39,13 +52,13 @@ function App() {
     setisHideSidebarHeader,
     themeMode,
     setthemeMode,
+    windowWidth,
   };
 
   return (
     <BrowserRouter>
       <MyContext.Provider value={values}>
         {isHideSidebarHeader !== true && <Header />}
-
         <div className="main d-flex">
           {isHideSidebarHeader !== true && (
             <div
@@ -69,6 +82,7 @@ function App() {
               <Route path="/signup" exact={true} element={<SignUp />} />
               <Route path="/product" exact={true} element={<Product />} />
               <Route path="/product/upload" exact={true} element={<ProductUpload  />} />
+              <Route path="/categories/add" exact={true} element={<CategoryAdd  />} />
               <Route
                 path="/product/details"
                 exact={true}
@@ -76,7 +90,7 @@ function App() {
               />
             </Routes>
           </div>
-        </div>
+        </div>        
       </MyContext.Provider>
     </BrowserRouter>
   );

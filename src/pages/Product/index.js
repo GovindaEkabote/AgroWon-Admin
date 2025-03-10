@@ -38,9 +38,9 @@ const Product = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleChange = (e) => {
-    setShowBy(e.target.value);
-  };
+  // const handleChange = (e) => {
+  //   setShowBy(e.target.value);
+  // };
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
