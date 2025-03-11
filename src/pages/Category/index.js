@@ -1,0 +1,205 @@
+import React, {useEffect, useState } from "react";
+import { Button } from "@mui/material";
+import { GiPencil } from "react-icons/gi";
+import { MdDelete } from "react-icons/md";
+import Pagination from "@mui/material/Pagination";
+import { editDataFromApi, fetchDataFromApi } from "../../utils/api";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+
+const Category = () => {
+  const [catData, setCatDate] = useState([]);
+  const [open, setOpen] = React.useState(false);
+  // const [editFields, setEditFields] = useState({});
+  const [editId, setEditId] = useState(null);
+  const [formFields, setFormFields] = useState({
+    name: "",
+    images: [],
+    color: "",
+  });
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    fetchDataFromApi("/api/v1/get-category").then((result) => {
+      setCatDate(result);
+      console.log(result);
+    });
+  }, []);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const editCategory = async (id) => {
+    setFormFields({
+      name: "",
+      images: "", 
+      color:  "",
+    })
+    setOpen(true);
+    setEditId(id);
+      const result = await fetchDataFromApi(`/api/v1/get-category/${id}`);
+        setFormFields({
+          name: result.category.name || "",
+          images: result.category.images?.[0] || "", 
+          color: result.category.color || "",
+        });
+  };
+
+  const categoryEditSubmit = (e) => {
+    e.preventDefault();
+    editDataFromApi(`/api/v1/update-caterory/${editId}`,formFields ).then((result) => {
+      fetchDataFromApi("/api/v1/get-category").then((result) => {
+        setCatDate(result);
+        console.log(result);
+      });
+    });
+  };
+
+  const changeInput = (e) => {
+    setFormFields(() => ({ ...formFields, [e.target.name]: e.target.value }));
+  };
+  const addImgUrl = (e) => {
+    const arr = [];
+    arr.push(e.target.value);
+    setFormFields(() => ({ ...formFields, [e.target.name]: arr }));
+  };
+  return (
+    <>
+      <div className="right-content w-100">
+        <div className="card shadow border-0 p-3 mt-4">
+          <div className="table-responsice mt-3">
+            <table className="table table-bordered v-align">
+              <thead className="thead-dark">
+                <tr>
+                  <th>UID</th>
+                  <th style={{ width: "300px" }}>CATEGORIES</th>
+                  <th>IMAGES</th>
+                  <th>COLORS</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+              <tbody>
+                {catData.length !== 0 &&
+                  catData?.map((item, index) => {
+                    return (
+                      <tr key={item.id || index}>
+                        <td>#{index + 1}</td>
+                        <td>{item.name}</td>
+                        <td>
+                          <div className="d-flex align-items-center productBox">
+                            <div className="imgWrapper">
+                              <div className="img">
+                                <img
+                                  src={item.images[0]}
+                                  alt="img"
+                                  className="w-100"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div className="flexCol">
+                            <span
+                              className="dot"
+                              style={{ background: item.color }}
+                            ></span>
+                            &nbsp; {item.color}
+                          </div>
+                        </td>
+                        <td>
+                          <div className="actions d-flex align-items-center">
+                            <Button
+                              className="success"
+                              color="success"
+                              onClick={() => editCategory(item._id)}
+                            >
+                              <GiPencil />
+                            </Button>
+                            <Button className="error" color="error">
+                              <MdDelete />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </table>
+            <div className="d-flex tableFooter">
+              <p>
+                Showing <b>12</b> of <b>60</b> result
+              </p>
+              <Pagination
+                count={50}
+                color="primary"
+                className="pagination"
+                showFirstButton
+                showLastButton
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <Dialog className="editModel" open={open} onClose={handleClose}>
+  <DialogContent>
+    <DialogContentText>
+      <h4>Edit Category</h4>
+    </DialogContentText>
+    <form onSubmit={categoryEditSubmit}>
+      <TextField
+        autoFocus
+        margin="dense"
+        id="name"
+        name="name"
+        label="Category Name"
+        type="text"
+        fullWidth
+        value={formFields.name}
+        onChange={changeInput}
+      />
+
+      <TextField
+        margin="dense"
+        id="images"
+        name="images"
+        label="Category Image"
+        type="text"
+        fullWidth
+        value={formFields.images}
+        onChange={addImgUrl}
+      />
+
+      <TextField
+        margin="dense"
+        id="color"
+        name="color"
+        label="Color"
+        type="text"
+        fullWidth
+        value={formFields.color}
+        onChange={changeInput}
+      />
+
+      <DialogActions>
+        <Button onClick={handleClose} variant="outlined" className="btn-red">
+          Cancel
+        </Button>
+        <Button type="submit" variant="outlined" className="btn-blue" onClick={handleClose}>
+          Submit
+        </Button>
+      </DialogActions>
+    </form>
+  </DialogContent>
+</Dialog>
+
+    </>
+  );
+};
+
+export default Category;

@@ -38,8 +38,6 @@ const CategoryAdd = () => {
     })
     
   };
-  
-
   return (
     <>
       <div className="right-content w-100">
@@ -57,7 +55,6 @@ const CategoryAdd = () => {
             </Link>
           </Breadcrumbs>
         </div>
-
         <form className="form" onSubmit={addCategory}>
           <div className="row">
             <div className="col-sm-9">

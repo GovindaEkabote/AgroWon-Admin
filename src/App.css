@@ -35,6 +35,14 @@ body.dark {
     color: #fff !important;
     border-radius: 5px !important;
 }
+.btn-red{
+    background: #f92020 !important;
+    font-size: 14px;
+    text-transform: capitalize !important;
+    font-weight: 600 !important;
+    color: #fff !important;
+    border-radius: 5px !important;
+}
 
 .btn-lg {
     padding: 5px 55px !important;
@@ -1380,4 +1388,20 @@ body.dark .form .form-group .ratingSection svg{
     height: 100%;
     object-fit: cover;
     border-radius: 10px;
+}
+
+.dot{
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+        
+}
+
+.flexCol{
+    display: flex !important;
+}
+
+.editModel .css-10d30g3-MuiPaper-root-MuiDialog-paper {
+    width: 600px !important;
 }
