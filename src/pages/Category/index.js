@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import { GiPencil } from "react-icons/gi";
 import { MdDelete } from "react-icons/md";
 import Pagination from "@mui/material/Pagination";
-import { editDataFromApi, fetchDataFromApi } from "../../utils/api";
+import { deleteDataApi, editDataFromApi, fetchDataFromApi } from "../../utils/api";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -13,6 +13,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 const Category = () => {
   const [catData, setCatDate] = useState([]);
   const [open, setOpen] = React.useState(false);
+  const [page, setPage] = useState(1);
   // const [editFields, setEditFields] = useState({});
   const [editId, setEditId] = useState(null);
   const [formFields, setFormFields] = useState({
@@ -67,6 +68,23 @@ const Category = () => {
     arr.push(e.target.value);
     setFormFields(() => ({ ...formFields, [e.target.name]: arr }));
   };
+
+  const deleteCategory = (id) =>{
+    deleteDataApi(`/api/v1/delete-categories/${id}`).then(res =>{
+      fetchDataFromApi("/api/v1/get-category").then((result) => {
+        setCatDate(result);
+        console.log(result);
+        
+      });
+    })    
+  }
+  const handleChange = (event,value) =>{
+    fetchDataFromApi(`/api/v1/get-category?page=${value}`).then((result) => {
+      setCatDate(result);
+      console.log(result);
+    });
+
+  }
   return (
     <>
       <div className="right-content w-100">
@@ -83,8 +101,8 @@ const Category = () => {
                 </tr>
               </thead>
               <tbody>
-                {catData.length !== 0 &&
-                  catData?.map((item, index) => {
+                {catData?.categoryList?.length !== 0 &&
+                  catData?.categoryList?.map((item, index) => {
                     return (
                       <tr key={item.id || index}>
                         <td>#{index + 1}</td>
@@ -120,7 +138,9 @@ const Category = () => {
                             >
                               <GiPencil />
                             </Button>
-                            <Button className="error" color="error">
+                            <Button className="error" color="error"
+                            onClick={() => deleteCategory(item._id)}
+                            >
                               <MdDelete />
                             </Button>
                           </div>
@@ -131,22 +151,21 @@ const Category = () => {
               </tbody>
             </table>
             <div className="d-flex tableFooter">
-              <p>
-                Showing <b>12</b> of <b>60</b> result
-              </p>
+             
               <Pagination
-                count={50}
+                count={catData?.totalPages}
                 color="primary"
                 className="pagination"
                 showFirstButton
                 showLastButton
+                onChange={handleChange}
               />
             </div>
           </div>
         </div>
       </div>
 
-      <Dialog className="editModel" open={open} onClose={handleClose}>
+  <Dialog className="editModel" open={open} onClose={handleClose}>
   <DialogContent>
     <DialogContentText>
       <h4>Edit Category</h4>

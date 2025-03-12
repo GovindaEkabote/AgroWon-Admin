@@ -5,14 +5,21 @@ import { Button } from "@mui/material";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import img from "../../assets/images/srk.jpeg";
 import { postData } from "../../utils/api";
+import {useNavigate} from 'react-router-dom'
 
 const CategoryAdd = () => {
+   
   const [formFields, setFormFields] = useState({
     name:'',
     images:[],
     color:''
   });
 
+  const navigate = useNavigate();
+  const submit = () => {
+    navigate('/categories')
+  };
+  
   const changeInput = (e) =>{
     setFormFields(() =>(
     { ...formFields,
@@ -61,7 +68,7 @@ const CategoryAdd = () => {
               <div className="card p-4 mt-0">
                 <div className="form-group">
                   <h6>CATEGORY NANE</h6>
-                  <input type="text" placeholder="Category Name" name="name" onChange={changeInput} />
+                  <input type="text" placeholder="Category Name" name="name" onChange={changeInput} required/>
                 </div>
                 <div className="form-group">
                   <h6>IMAGE URL</h6>
@@ -71,6 +78,8 @@ const CategoryAdd = () => {
                     className="mt-1"
                     name="images"
                     onChange={addImgUrl}
+                    required
+
                   />
                 </div>
                 <div className="form-group">
@@ -81,9 +90,10 @@ const CategoryAdd = () => {
                     className="mt-1"
                     name="color"
                     onChange={changeInput}
+                    required
                   />
                 </div>
-                <Button type="submit" className="btn-blue btn-lg btn-big">
+                <Button type="submit" className="btn-blue btn-lg btn-big" onClick={submit}>
                   <FaCloudUploadAlt />
                   &nbsp;SUBMIT
                 </Button>

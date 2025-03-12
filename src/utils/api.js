@@ -29,3 +29,12 @@ export const postData = async (url, formData) => {
   }
 };
   
+
+export const deleteDataApi = async(url) =>{
+  try {
+    const { data } =await axios.delete(`http://localhost:4001${url}`);
+    return data;
+  } catch (error) {
+    console.log(error);    
+  }
+}

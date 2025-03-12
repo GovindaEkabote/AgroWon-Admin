@@ -98,7 +98,7 @@ const Sidebar = () => {
             >
               <ul className="submenu">
                 <li>
-                  <Link to="/product">Categories List</Link>
+                  <Link to="/categories">Categories List</Link>
                 </li>
                 <li>
                   <Link to="/categories/add"> Add Categories</Link>
