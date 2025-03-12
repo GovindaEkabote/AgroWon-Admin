@@ -1349,6 +1349,7 @@ body.dark .form .form-group .ratingSection svg{
     
 }
 
+
 .imgUploadBox{
     width: 100%;
     flex-wrap: nowrap;
@@ -1405,3 +1406,4 @@ body.dark .form .form-group .ratingSection svg{
 .editModel .css-10d30g3-MuiPaper-root-MuiDialog-paper {
     width: 600px !important;
 }
+

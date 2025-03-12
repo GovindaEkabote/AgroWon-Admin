@@ -5,45 +5,58 @@ import { Button } from "@mui/material";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import img from "../../assets/images/srk.jpeg";
 import { postData } from "../../utils/api";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
+import { MdReply } from "react-icons/md";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 const CategoryAdd = () => {
-   
   const [formFields, setFormFields] = useState({
-    name:'',
-    images:[],
-    color:''
+    name: "",
+    images: [],
+    color: "",
   });
+
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const navigate = useNavigate();
   const submit = () => {
-    navigate('/categories')
-  };
-  
-  const changeInput = (e) =>{
-    setFormFields(() =>(
-    { ...formFields,
-      [e.target.name]:e.target.value
+    if (
+      formFields.name !== "" &&
+      formFields.images !== 0 &&
+      formFields.color !== ""
+    ) {
+      navigate("/categories");
+    } else {
+      setOpen(true);
     }
-    ))
-  }
-  const addImgUrl = (e) =>{
+  };
+
+  const changeInput = (e) => {
+    setFormFields(() => ({ ...formFields, [e.target.name]: e.target.value }));
+  };
+  const addImgUrl = (e) => {
     const arr = [];
-    arr.push(e.target.value)
-    setFormFields(() =>(
-      { ...formFields,
-        [e.target.name]:arr
-      }
-      ))
-  }
+    arr.push(e.target.value);
+    setFormFields(() => ({ ...formFields, [e.target.name]: arr }));
+  };
   const addCategory = async (e) => {
     e.preventDefault();
-    
-    postData('/api/v1/create', formFields).then(res =>{
+
+    postData("/api/v1/create", formFields).then((res) => {
       console.log(res);
-      
-    })
-    
+    });
+  };
+
+  const categoryList = () => {
+    navigate("/categories");
   };
   return (
     <>
@@ -68,7 +81,12 @@ const CategoryAdd = () => {
               <div className="card p-4 mt-0">
                 <div className="form-group">
                   <h6>CATEGORY NANE</h6>
-                  <input type="text" placeholder="Category Name" name="name" onChange={changeInput} required/>
+                  <input
+                    type="text"
+                    placeholder="Category Name"
+                    name="name"
+                    onChange={changeInput}
+                  />
                 </div>
                 <div className="form-group">
                   <h6>IMAGE URL</h6>
@@ -78,8 +96,6 @@ const CategoryAdd = () => {
                     className="mt-1"
                     name="images"
                     onChange={addImgUrl}
-                    required
-
                   />
                 </div>
                 <div className="form-group">
@@ -90,13 +106,31 @@ const CategoryAdd = () => {
                     className="mt-1"
                     name="color"
                     onChange={changeInput}
-                    required
                   />
                 </div>
-                <Button type="submit" className="btn-blue btn-lg btn-big" onClick={submit}>
-                  <FaCloudUploadAlt />
-                  &nbsp;SUBMIT
-                </Button>
+                <div className="row">
+                  <div className="col-md-3 w-100">
+                    <Button
+                      type="submit"
+                      className="btn-blue btn-lg btn-big"
+                      onClick={submit}
+                    >
+                      <FaCloudUploadAlt />
+                      &nbsp;SUBMIT
+                    </Button>
+                  </div>
+                  <div className="col-md-5 w-100">
+                    <Button
+                      type="submit"
+                      className="btn-blue btn-lg btn-big"
+                      onClick={categoryList}
+                    >
+                      <MdReply />
+                      &nbsp;Category List
+                    </Button>
+                  </div>
+                </div>
+
                 <br />
               </div>
             </div>
@@ -109,6 +143,19 @@ const CategoryAdd = () => {
           </div>
         </form>
       </div>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"PLEASE ADD THE CATEGORY"}
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

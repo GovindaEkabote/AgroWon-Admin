@@ -1,14 +1,19 @@
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import { GiPencil } from "react-icons/gi";
 import { MdDelete } from "react-icons/md";
 import Pagination from "@mui/material/Pagination";
-import { deleteDataApi, editDataFromApi, fetchDataFromApi } from "../../utils/api";
+import {
+  deleteDataApi,
+  editDataFromApi,
+  fetchDataFromApi,
+} from "../../utils/api";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
+import { Link } from "react-router-dom";
 
 const Category = () => {
   const [catData, setCatDate] = useState([]);
@@ -37,27 +42,29 @@ const Category = () => {
   const editCategory = async (id) => {
     setFormFields({
       name: "",
-      images: "", 
-      color:  "",
-    })
+      images: "",
+      color: "",
+    });
     setOpen(true);
     setEditId(id);
-      const result = await fetchDataFromApi(`/api/v1/get-category/${id}`);
-        setFormFields({
-          name: result.category.name || "",
-          images: result.category.images?.[0] || "", 
-          color: result.category.color || "",
-        });
+    const result = await fetchDataFromApi(`/api/v1/get-category/${id}`);
+    setFormFields({
+      name: result.category.name || "",
+      images: result.category.images?.[0] || "",
+      color: result.category.color || "",
+    });
   };
 
   const categoryEditSubmit = (e) => {
     e.preventDefault();
-    editDataFromApi(`/api/v1/update-caterory/${editId}`,formFields ).then((result) => {
-      fetchDataFromApi("/api/v1/get-category").then((result) => {
-        setCatDate(result);
-        console.log(result);
-      });
-    });
+    editDataFromApi(`/api/v1/update-caterory/${editId}`, formFields).then(
+      (result) => {
+        fetchDataFromApi("/api/v1/get-category").then((result) => {
+          setCatDate(result);
+          console.log(result);
+        });
+      }
+    );
   };
 
   const changeInput = (e) => {
@@ -69,22 +76,20 @@ const Category = () => {
     setFormFields(() => ({ ...formFields, [e.target.name]: arr }));
   };
 
-  const deleteCategory = (id) =>{
-    deleteDataApi(`/api/v1/delete-categories/${id}`).then(res =>{
+  const deleteCategory = (id) => {
+    deleteDataApi(`/api/v1/delete-categories/${id}`).then((res) => {
       fetchDataFromApi("/api/v1/get-category").then((result) => {
         setCatDate(result);
         console.log(result);
-        
       });
-    })    
-  }
-  const handleChange = (event,value) =>{
+    });
+  };
+  const handleChange = (event, value) => {
     fetchDataFromApi(`/api/v1/get-category?page=${value}`).then((result) => {
       setCatDate(result);
       console.log(result);
     });
-
-  }
+  };
   return (
     <>
       <div className="right-content w-100">
@@ -138,8 +143,10 @@ const Category = () => {
                             >
                               <GiPencil />
                             </Button>
-                            <Button className="error" color="error"
-                            onClick={() => deleteCategory(item._id)}
+                            <Button
+                              className="error"
+                              color="error"
+                              onClick={() => deleteCategory(item._id)}
                             >
                               <MdDelete />
                             </Button>
@@ -151,7 +158,11 @@ const Category = () => {
               </tbody>
             </table>
             <div className="d-flex tableFooter">
-             
+              <Link to={"/categories/add"}>
+                <Button className="btn-blue btn-lg btn-big">
+                  ADD CATEGORY
+                </Button>
+              </Link>
               <Pagination
                 count={catData?.totalPages}
                 color="primary"
@@ -165,58 +176,70 @@ const Category = () => {
         </div>
       </div>
 
-  <Dialog className="editModel" open={open} onClose={handleClose}>
-  <DialogContent>
-    <DialogContentText>
-      <h4>Edit Category</h4>
-    </DialogContentText>
-    <form onSubmit={categoryEditSubmit}>
-      <TextField
-        autoFocus
-        margin="dense"
-        id="name"
-        name="name"
-        label="Category Name"
-        type="text"
-        fullWidth
-        value={formFields.name}
-        onChange={changeInput}
-      />
+      <Dialog className="editModel" open={open} onClose={handleClose}>
+        <DialogContent>
+          <DialogContentText>
+            <h4>Edit Category</h4>
+          </DialogContentText>
+          <form onSubmit={categoryEditSubmit}>
+            <div className="form-group mb-3">
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                name="name"
+                label="Category Name"
+                type="text"
+                fullWidth
+                value={formFields.name}
+                onChange={changeInput}
+              />
+            </div>
 
-      <TextField
-        margin="dense"
-        id="images"
-        name="images"
-        label="Category Image"
-        type="text"
-        fullWidth
-        value={formFields.images}
-        onChange={addImgUrl}
-      />
-
-      <TextField
-        margin="dense"
-        id="color"
-        name="color"
-        label="Color"
-        type="text"
-        fullWidth
-        value={formFields.color}
-        onChange={changeInput}
-      />
-
-      <DialogActions>
-        <Button onClick={handleClose} variant="outlined" className="btn-red">
-          Cancel
-        </Button>
-        <Button type="submit" variant="outlined" className="btn-blue" onClick={handleClose}>
-          Submit
-        </Button>
-      </DialogActions>
-    </form>
-  </DialogContent>
-</Dialog>
-
+            <div className="form-group mb-3">
+              <TextField
+                margin="dense"
+                id="images"
+                name="images"
+                label="Category Image"
+                type="text"
+                fullWidth
+                value={formFields.images}
+                onChange={addImgUrl}
+              />
+            </div>
+            <div className="form-group mb-3">
+            <TextField
+              margin="dense"
+              id="color"
+              name="color"
+              label="Color"
+              type="text"
+              fullWidth
+              value={formFields.color}
+              onChange={changeInput}
+            />
+            </div>
+            <DialogActions>
+              <Button
+                onClick={handleClose}
+                variant="outlined"
+                className="btn-red"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="outlined"
+                className="btn-blue"
+                onClick={handleClose}
+              >
+                Submit
+              </Button>
+            </DialogActions>
+          </form>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
