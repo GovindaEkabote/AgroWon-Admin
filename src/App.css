@@ -35,7 +35,8 @@ body.dark {
     color: #fff !important;
     border-radius: 5px !important;
 }
-.btn-red{
+
+.btn-red {
     background: #f92020 !important;
     font-size: 14px;
     text-transform: capitalize !important;
@@ -101,6 +102,7 @@ header .logo {
     height: 70px;
     border-radius: 10px !important;
 }
+
 body.dark header .logo {
     opacity: 0.5 !important;
 }
@@ -212,7 +214,8 @@ body.dark .searchBox svg {
     width: 100%;
     height: 100%;
 }
-.userImg.lg{
+
+.userImg.lg {
     width: 60px !important;
     height: 60px !important;
 }
@@ -796,7 +799,8 @@ h6,
 p {
     color: #403e57;
 }
-p{
+
+p {
     font-weight: 300;
     font-size: 15px;
     line-height: 25px;
@@ -937,9 +941,10 @@ body.dark .css-1bug3cd-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected:ho
     color: yellow;
 }
 
-body.dark .loginSection{
+body.dark .loginSection {
     background: #071739 !important;
 }
+
 .loginSection {
     width: 100%;
     height: 100vh;
@@ -1004,9 +1009,11 @@ body.dark .loginSection{
     right: 8px;
     cursor: pointer;
 }
-body.dark .toggleShowPassword svg{
+
+body.dark .toggleShowPassword svg {
     color: #fff;
 }
+
 .toggleShowPassword svg {
     font-size: 21px;
     color: #5e5d72;
@@ -1056,7 +1063,7 @@ body.dark .toggleShowPassword svg{
     background-color: #233a95 !important;
 }
 
-.sliderSmall .slick-current .item{
+.sliderSmall .slick-current .item {
     border: 2px dashed black;
 }
 
@@ -1077,11 +1084,13 @@ body.dark .toggleShowPassword svg{
     border-radius: 17px !important;
 }
 
-body.dark .sliderSmall .slick-next:before, .sliderSmall .slick-prev:before{
+body.dark .sliderSmall .slick-next:before,
+.sliderSmall .slick-prev:before {
     color: #071739 !important;
 }
 
-.sliderSmall .slick-next:before, .sliderSmall .slick-prev:before{
+.sliderSmall .slick-next:before,
+.sliderSmall .slick-prev:before {
     color: #000 !important;
     font-size: 10px;
 }
@@ -1091,23 +1100,25 @@ body.dark .sliderSmall .slick-next:before, .sliderSmall .slick-prev:before{
     transition: all 0.2s !important;
 }
 
-.sliderBig .item{
+.sliderBig .item {
     overflow: hidden;
     border-radius: 16px;
     border: 2px dashed rgba(0, 0, 0, 0.2);
     cursor: pointer;
 }
-body.dark .sliderBig .item{
+
+body.dark .sliderBig .item {
     border: 2px dashed rgb(255, 255, 255, 0.8);
 }
 
-.sliderSmall .item{
+.sliderSmall .item {
     overflow: hidden;
     border-radius: 16px;
     border: 2px dashed rgba(0, 0, 0, 0.2);
     cursor: pointer;
 }
-body.dark .sliderSmall .item{
+
+body.dark .sliderSmall .item {
     border: 2px dashed rgb(255, 255, 255, 0.8);
 }
 
@@ -1154,51 +1165,62 @@ body.dark .sliderSmall .item{
     padding: 5px 5px !important;
 }
 
-.tags li span:first-child{
+.tags li span:first-child {
     padding-left: 0px !important;
 }
-.ratingSection{
+
+.ratingSection {
     width: 500px;
 }
-.ratingSection .ratingrow{
+
+.ratingSection .ratingrow {
     width: 100%;
 }
-.ratingSection .ratingrow .progress{
-     height: 5px !important;
-     background: #000 !important;
-     margin-bottom: 5px !important;
+
+.ratingSection .ratingrow .progress {
+    height: 5px !important;
+    background: #000 !important;
+    margin-bottom: 5px !important;
 }
-body.dark .ratingSection .ratingrow .progress{
+
+body.dark .ratingSection .ratingrow .progress {
     background: #fff !important;
 }
-.ratingSection .ratingrow .progress .progress-bar{
+
+.ratingSection .ratingrow .progress .progress-bar {
     background: #edb213 !important;
 }
-.ratingSection .ratingrow .col1{
+
+.ratingSection .ratingrow .col1 {
     width: 13%;
     flex: 0 0 13%;
     display: flex;
 }
-.ratingSection .ratingrow .col2{
+
+.ratingSection .ratingrow .col2 {
     width: 50%;
     flex: 0 0 50%;
 }
-.ratingSection .ratingrow .col3{
+
+.ratingSection .ratingrow .col3 {
     width: 25%;
     flex: 0 0 25%;
     display: flex;
     padding-left: 15px !important;
 
 }
-.reviewsSection{
+
+.reviewsSection {
     width: 100%;
     display: flex;
     flex-direction: column;
 }
-.reviewsSection .reviewsRow p{
+
+.reviewsSection .reviewsRow p {
     padding-left: 20px;
 }
-.reviewsSection .reviewsRow{
+
+.reviewsSection .reviewsRow {
     width: 100%;
     height: auto;
     background: #f3f0f0 !important;
@@ -1208,41 +1230,45 @@ body.dark .ratingSection .ratingrow .progress{
 
 }
 
-body.dark .right-content .reviewsSection .reviewsRow{
+body.dark .right-content .reviewsSection .reviewsRow {
     background: #071739 !important;
 }
 
-.userInfo h6{
+.userInfo h6 {
     margin-bottom: 4px !important;
 }
 
-body.dark .userInfo .ratings svg{
+body.dark .userInfo .ratings svg {
     color: #edb213 !important;
 
 }
 
-.reviewsSection .reviewsRow.reply{
+.reviewsSection .reviewsRow.reply {
     width: 90%;
     margin-left: auto;
 }
-.btn-big svg{
+
+.btn-big svg {
     font-size: 20px;
 }
 
-.reviewsSection .reviewsRow .btn-big{
+.reviewsSection .reviewsRow .btn-big {
     font-size: 15px !important;
 }
-.reviewsSection .reviewsRow .btn-big svg{
+
+.reviewsSection .reviewsRow .btn-big svg {
     font-size: 18px !important;
 }
 
-.reviewForm{
+.reviewForm {
     width: 100%;
 }
-.reviewForm form{
-    border-radius: 10px ;
+
+.reviewForm form {
+    border-radius: 10px;
 }
-.reviewForm textarea{
+
+.reviewForm textarea {
     width: 100%;
     height: 200px;
     background: #f3f0f0 !important;
@@ -1254,29 +1280,34 @@ body.dark .userInfo .ratings svg{
     font-size: 15px;
     line-height: 25px;
 }
-.reviewForm textarea::-webkit-input-placeholder{
+
+.reviewForm textarea::-webkit-input-placeholder {
     color: #000 !important;
-    font-size: px ;
+    font-size: px;
 }
-body.dark .reviewForm textarea{
+
+body.dark .reviewForm textarea {
     background: #071739 !important;
     color: rgb(255, 255, 255, 0.8) !important;
     font-weight: 300;
     font-size: 15px;
     line-height: 25px;
 }
-body.dark .reviewForm textarea::-webkit-input-placeholder{
+
+body.dark .reviewForm textarea::-webkit-input-placeholder {
     color: rgb(255, 255, 255, 0.8) !important;
 }
 
-.form .form-group{
-    margin-bottom: 25px; 
+.form .form-group {
+    margin-bottom: 25px;
 }
-.form .form-group h6{
+
+.form .form-group h6 {
     margin-bottom: 10px;
     font-size: 13px;
 }
-.form .form-group input{
+
+.form .form-group input {
     background: #f3f0f0 !important;
     width: 100%;
     outline: none !important;
@@ -1286,23 +1317,27 @@ body.dark .reviewForm textarea::-webkit-input-placeholder{
     border-radius: 5px;
     font-size: 15px;
 }
-body.dark .form .form-group input{
+
+body.dark .form .form-group input {
     background: #071739 !important;
     color: rgb(255, 255, 255, 0.8) !important;
 
 
 }
-.form .form-group input::-webkit-input-placeholder{
+
+.form .form-group input::-webkit-input-placeholder {
     /* padding: 10px !important; */
     color: rgb(0, 0, 0, 0.6);
     font-weight: 600;
     font-size: 15px;
 }
-body.dark .form .form-group input::-webkit-input-placeholder{
+
+body.dark .form .form-group input::-webkit-input-placeholder {
     color: rgb(255, 255, 255, 0.8) !important;
 }
 
-.form .form-group input, .form .form-group textarea{
+.form .form-group input,
+.form .form-group textarea {
     background: #fafafa;
     width: 100%;
     outline: none !important;
@@ -1314,7 +1349,7 @@ body.dark .form .form-group input::-webkit-input-placeholder{
 }
 
 
-.form .form-group textarea{
+.form .form-group textarea {
     background: #f3f0f0 !important;
     width: 100%;
     outline: none !important;
@@ -1324,38 +1359,43 @@ body.dark .form .form-group input::-webkit-input-placeholder{
     border-radius: 5px;
     font-size: 15px;
 }
-.form .form-group textarea{
+
+.form .form-group textarea {
     height: 120px;
     margin-top: 15px;
 }
-body.dark .form .form-group textarea{
+
+body.dark .form .form-group textarea {
     background: #071739 !important;
     color: rgb(255, 255, 255, 0.8) !important;
 
 
 }
-.form .form-group textarea::-webkit-input-placeholder{
+
+.form .form-group textarea::-webkit-input-placeholder {
     /* padding: 10px !important; */
     color: rgb(0, 0, 0, 0.6);
     font-weight: 600;
     font-size: 15px;
 }
-body.dark .form .form-group textarea::-webkit-input-placeholder{
+
+body.dark .form .form-group textarea::-webkit-input-placeholder {
     color: rgb(255, 255, 255, 0.8) !important;
 }
 
-body.dark .form .form-group .ratingSection svg{
+body.dark .form .form-group .ratingSection svg {
     color: #edb213 !important;
-    
+
 }
 
 
-.imgUploadBox{
+.imgUploadBox {
     width: 100%;
     flex-wrap: nowrap;
     gap: 10px;
 }
-.imgUploadBox .uploadBox{
+
+.imgUploadBox .uploadBox {
     width: 150px;
     height: 150px !important;
     padding: 0px;
@@ -1369,37 +1409,40 @@ body.dark .form .form-group .ratingSection svg{
     background: #fafafa;
     transition: all 0.3s;
 }
-.imgUploadBox .uploadBox .box{
+
+.imgUploadBox .uploadBox .box {
     width: 100%;
     height: 150px;
     overflow: hidden;
     border-radius: 15px !important;
     padding: 2px;
 }
-.imgUploadBox .uploadBox .box .lazy-load-image-background{
+
+.imgUploadBox .uploadBox .box .lazy-load-image-background {
     height: 100% !important;
     width: 100% !important;
 }
 
-.imagesUploadSec .uploadBox .remove svg{
+.imagesUploadSec .uploadBox .remove svg {
     font-size: 10px;
     color: #fff;
 }
-.imgUploadBox .uploadBox img{
+
+.imgUploadBox .uploadBox img {
     height: 100%;
     object-fit: cover;
     border-radius: 10px;
 }
 
-.dot{
+.dot {
     display: block;
     width: 20px;
     height: 20px;
     border-radius: 100%;
-        
+
 }
 
-.flexCol{
+.flexCol {
     display: flex !important;
 }
 
@@ -1407,3 +1450,39 @@ body.dark .form .form-group .ratingSection svg{
     width: 600px !important;
 }
 
+.stickyBox{
+    position: sticky;
+    top: 90px;
+}
+.stickyBox h4{
+    font-size: 20px;
+    margin-bottom: 10px;
+    opacity: 1;
+}
+.imgGrid {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 10px;
+    position: sticky;
+    top: 80px;
+}
+
+.imgGrid .img {
+    width: 47%;
+    overflow: hidden;
+    height: 100%;
+    border-radius: 7px;
+
+}
+
+.imgGrid .img img {
+    width: 100%;
+    height: 100%;
+}
+
+.inputBtn button{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 100;
+}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
 import MenuItem from "@mui/material/MenuItem";
@@ -6,10 +6,7 @@ import Select from "@mui/material/Select";
 import Rating from "@mui/material/Rating";
 import { Button } from "@mui/material";
 import { FaCloudUploadAlt } from "react-icons/fa";
-import { IoCloseSharp } from "react-icons/io5";
-import img from "../../assets/images/srk.jpeg";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import { IoImages } from "react-icons/io5";
+
 
 const ProductUpload = () => {
   const [categoryValue, setCategoryValue] = useState("");
@@ -17,7 +14,11 @@ const ProductUpload = () => {
   const [productRams, setProductRams] = useState([]);
   const [ratingValue, setRatingValue] = useState(2);
   const [productQuantity, setProductQuantity] = useState([]);
-  const [isFeaturedValue, setisFeaturedValue] = useState(true);
+  const [isFeaturedValue, setisFeaturedValue] = useState(false);
+  const [productImagesArr,setProductImagesArr] = useState([])
+
+const productImages = useRef()
+const imagesArr = [];
 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -54,6 +55,13 @@ const ProductUpload = () => {
   const handleChangeisFeaturedValue = (event) => {
     setisFeaturedValue(event.target.value);
   };
+  
+  const addProductImages = () => {
+    if (productImages.current.value) {
+      setProductImagesArr((prev) => [...prev, productImages.current.value]);
+      productImages.current.value = ""; 
+    }
+  };
   return (
     <>
       <div className="right-content w-100">
@@ -74,7 +82,7 @@ const ProductUpload = () => {
 
         <form className="form">
           <div className="row">
-            <div className="col-sm-12">
+            <div className="col-sm-9">
               <div className="card p-4 mt-0">
                 <h5 className="mb-4">Product Information</h5>
                 <div className="form-group">
@@ -185,8 +193,8 @@ const ProductUpload = () => {
                         inputProps={{ "aria-label": "Without label" }}
                         className="w-100"
                       >
-                        <MenuItem value="True">True</MenuItem>
-                        <MenuItem value="False">False</MenuItem>
+                        <MenuItem value="true">True</MenuItem>
+                        <MenuItem value="false">False</MenuItem>
                       </Select>
                     </div>
                   </div>
@@ -280,25 +288,17 @@ const ProductUpload = () => {
                 <div className="card p-4 mt-0">
                   <div className="imagesUploadSec">
                     <h5>Media And Published</h5>
-                    <div className="imgUploadBox d-flex align-items-center">
-                      <div className="uploadBox">
-                        <span className="remove">
-                          <IoCloseSharp />
-                        </span>
-                        <div className="box">
-                          <LazyLoadImage
-                            alt={"image"}
-                            effect="blur"
-                            className="w-100"
-                            src={img} // use normal <img> attributes as props
+                    <div className="row">
+                      <div className="col">
+                        <div className="form-group">
+                          <div className="position-relative inputBtn"> 
+                          <input
+                            type="text" ref={productImages}
+                            style={{paddingRight:'100px'}}
+                            placeholder="Please Enter Image URL"
                           />
-                        </div>
-                      </div>
-                      <div className="uploadBox">
-                        <input type="file" multiple name="images" />
-                        <div className="info">
-                          <IoImages />
-                          <h5>image Upload</h5>
+                          <Button className="btn btn-blue" onClick={addProductImages}>ADD</Button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -310,6 +310,26 @@ const ProductUpload = () => {
                 </Button>
                 <br />
               </div>
+            </div>
+
+            <div className="col-sm-3">
+             <div className="stickyBox">
+            <h4 className="text">Product Images</h4>
+             <div className="imgGrid d-flex">
+             {
+              productImagesArr?.length !== 0   && productImagesArr?.map((item,index) =>{
+                return(
+                  <div className="img">
+                  <img
+                    src={item}
+                    alt="img"
+                  />
+                </div>
+                )
+              })
+             }                
+              </div>
+             </div>
             </div>
           </div>
         </form>
