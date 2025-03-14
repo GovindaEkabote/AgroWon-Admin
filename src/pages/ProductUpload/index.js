@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
 import MenuItem from "@mui/material/MenuItem";
@@ -6,7 +6,7 @@ import Select from "@mui/material/Select";
 import Rating from "@mui/material/Rating";
 import { Button } from "@mui/material";
 import { FaCloudUploadAlt } from "react-icons/fa";
-
+import { fetchDataFromApi } from "../../utils/api";
 
 const ProductUpload = () => {
   const [categoryValue, setCategoryValue] = useState("");
@@ -15,10 +15,38 @@ const ProductUpload = () => {
   const [ratingValue, setRatingValue] = useState(2);
   const [productQuantity, setProductQuantity] = useState([]);
   const [isFeaturedValue, setisFeaturedValue] = useState(false);
-  const [productImagesArr,setProductImagesArr] = useState([])
+  const [productImagesArr, setProductImagesArr] = useState([]);
+  const [catData, setCatData] = useState([]);
 
-const productImages = useRef()
-const imagesArr = [];
+  const [formFields, setFormFields] = useState({
+    name: "",
+    description: "",
+    category: "",
+    subCategory: "",
+    price: 0,
+    oldPrice: 0,
+    isFeatured: false,
+    countInStock: 0,
+    discount: 0,
+    weight: [],
+    quantity: [],
+    rating: 0,
+    brand: "",
+    images: [],
+  });
+
+  const productImages = useRef();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    fetchDataFromApi("/api/v1/get-category?all=true")
+      .then((result) => {
+        setCatData(
+          Array.isArray(result.categoryList) ? result.categoryList : []
+        );
+      })
+      .catch((error) => console.error("API Error:", error));
+  }, []);
 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -42,25 +70,48 @@ const imagesArr = [];
     const {
       target: { value },
     } = event;
-    setProductRams(typeof value === "string" ? value.split(",") : value);
+    setFormFields((prevState) => ({
+      ...prevState,
+      weight: typeof value === "string" ? value.split(",") : value, // Ensure it's an array
+    }));
   };
 
   const handleChangeProductQuantity = (event) => {
     const {
       target: { value },
     } = event;
-    setProductQuantity(typeof value === "string" ? value.split(",") : value);
+    setFormFields((prevState) => ({
+      ...prevState,
+      quantity: typeof value === "string" ? value.split(",") : value, // Ensure it's an array
+    }));
+  
   };
 
-  const handleChangeisFeaturedValue = (event) => {
-    setisFeaturedValue(event.target.value);
+  const handleChangeisFeaturedValue = (e) => {
+    // setisFeaturedValue(event.target.value);
+    setFormFields((prevState) => ({
+      ...prevState,
+      isFeatured: e.target.value === "true", // Convert string to boolean
+    }));
   };
-  
+
   const addProductImages = () => {
     if (productImages.current.value) {
       setProductImagesArr((prev) => [...prev, productImages.current.value]);
-      productImages.current.value = ""; 
+      productImages.current.value = "";
     }
+  };
+
+  const inputChange = (e) =>{
+    setFormFields(() =>({
+      ...formFields,
+      [e.target.name]:e.target.value,
+    }))
+  }
+
+  const addProduct = (e) => {
+    e.preventDefault();
+    console.log(formFields);
   };
   return (
     <>
@@ -80,14 +131,14 @@ const imagesArr = [];
           </Breadcrumbs>
         </div>
 
-        <form className="form">
+        <form className="form" onSubmit={addProduct}>
           <div className="row">
             <div className="col-sm-9">
               <div className="card p-4 mt-0">
                 <h5 className="mb-4">Product Information</h5>
                 <div className="form-group">
                   <h6>PRODUCT NANE</h6>
-                  <input type="text" placeholder="Product Name" />
+                  <input type="text" placeholder="Product Name" name="name" onChange={inputChange} />
                 </div>
                 <div className="form-group">
                   <h6>PRODUCT DESCRIPTION</h6>
@@ -96,6 +147,7 @@ const imagesArr = [];
                     cols={10}
                     placeholder="Product Description"
                     className="mt-1"
+                    name="description" onChange={inputChange}
                   />
                 </div>
 
@@ -110,33 +162,19 @@ const imagesArr = [];
                         inputProps={{ "aria-label": "Without label" }}
                         className="w-100"
                       >
-                        <MenuItem
-                          className="text-capitalize"
-                          value="Vegetables"
-                        >
-                          Vegetables
-                        </MenuItem>
-                        <MenuItem className="text-capitalize" value="Fruits">
-                          Fruits
-                        </MenuItem>
-                        <MenuItem className="text-capitalize" value="Flower">
-                          Flower
-                        </MenuItem>
-                        <MenuItem
-                          className="text-capitalize"
-                          value="Organic-Fertilizer"
-                        >
-                          Organic-Fertilizer
-                        </MenuItem>
-                        <MenuItem
-                          className="text-capitalize"
-                          value="Inorganic-Fertilizer"
-                        >
-                          Inorganic-Fertilizer
-                        </MenuItem>
-                        <MenuItem className="text-capitalize" value="Non-Veg">
-                          Non-Veg
-                        </MenuItem>
+                        {catData.length > 0 ? (
+                          catData.map((cat) => (
+                            <MenuItem
+                              key={cat._id}
+                              className="text-capitalize"
+                              value={cat.name}
+                            >
+                              {cat.name}
+                            </MenuItem>
+                          ))
+                        ) : (
+                          <MenuItem disabled>No categories found</MenuItem>
+                        )}
                       </Select>
                     </div>
                   </div>
@@ -144,17 +182,13 @@ const imagesArr = [];
                   <div className="col">
                     <div className="form-group">
                       <h6>PRODUCT SUB CATEGORIES</h6>
-                      <Select
-                        value={subCatVal}
-                        onChange={handleChangeSubCategory}
-                        displayEmpty
-                        inputProps={{ "aria-label": "Without label" }}
-                        className="w-100"
-                      >
-                        <MenuItem value="Apple">Apple</MenuItem>
-                        <MenuItem value="Banana">Banana</MenuItem>
-                        <MenuItem value="Kiwi">Kiwi</MenuItem>
-                      </Select>
+                      <input
+                        type="text"
+                        
+                        placeholder="Add Product Sub-Category"
+                        name="subCategory" onChange={inputChange}
+
+                      />
                     </div>
                   </div>
                 </div>
@@ -166,6 +200,7 @@ const imagesArr = [];
                       <input
                         type="text"
                         name="price"
+                        onChange={inputChange}
                         placeholder="Product Price"
                       />
                     </div>
@@ -176,6 +211,7 @@ const imagesArr = [];
                       <input
                         type="text"
                         name="oldPrice"
+                        onChange={inputChange}
                         placeholder="Old Price "
                       />
                     </div>
@@ -187,7 +223,8 @@ const imagesArr = [];
                     <div className="form-group">
                       <h6 className="text-uppercase">is Featured</h6>
                       <Select
-                        value={isFeaturedValue}
+                        name="isFeatured"
+                        value={formFields.isFeatured.toString()} 
                         onChange={handleChangeisFeaturedValue}
                         displayEmpty
                         inputProps={{ "aria-label": "Without label" }}
@@ -204,6 +241,7 @@ const imagesArr = [];
                       <input
                         type="text"
                         name="countInStock"
+                        onChange={inputChange}
                         placeholder="Enter Product Quentity"
                       />
                     </div>
@@ -216,6 +254,7 @@ const imagesArr = [];
                       <input
                         type="text"
                         name="discount"
+                        onChange={inputChange}
                         placeholder="Enter Discount Amount"
                       />
                     </div>
@@ -225,7 +264,7 @@ const imagesArr = [];
                       <h6>PRODUCT WEIGHT (Change later) </h6>
                       <Select
                         multiple
-                        value={productRams}
+                        value={formFields.weight}
                         onChange={handleChangeProductWeight}
                         displayEmpty
                         MenuProps={MenuProps}
@@ -260,7 +299,8 @@ const imagesArr = [];
                       <h6>BRAND</h6>
                       <input
                         type="text"
-                        name="price"
+                        name="brand"
+                        onChange={inputChange}
                         placeholder="Product Brand Name"
                       />
                     </div>
@@ -269,7 +309,7 @@ const imagesArr = [];
                     <div className="form-group">
                       <h6>PRODUCT QUANTITY </h6>
                       <Select
-                        value={productQuantity}
+                        value={formFields.quantity}
                         onChange={handleChangeProductQuantity}
                         multiple
                         displayEmpty
@@ -291,20 +331,28 @@ const imagesArr = [];
                     <div className="row">
                       <div className="col">
                         <div className="form-group">
-                          <div className="position-relative inputBtn"> 
-                          <input
-                            type="text" ref={productImages}
-                            style={{paddingRight:'100px'}}
-                            placeholder="Please Enter Image URL"
-                          />
-                          <Button className="btn btn-blue" onClick={addProductImages}>ADD</Button>
+                          <div className="position-relative inputBtn">
+                            <input
+                              type="text"
+                              ref={productImages}
+                              style={{ paddingRight: "100px" }}
+                              placeholder="Please Enter Image URL"
+                              name="images"
+                              onChange={inputChange}
+                            />
+                            <Button
+                              className="btn btn-blue"
+                              onClick={addProductImages}
+                            >
+                              ADD
+                            </Button>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <Button className="btn-blue btn-lg btn-big">
+                <Button type="submit" className="btn-blue btn-lg btn-big">
                   <FaCloudUploadAlt />
                   &nbsp;Publish Product
                 </Button>
@@ -313,23 +361,19 @@ const imagesArr = [];
             </div>
 
             <div className="col-sm-3">
-             <div className="stickyBox">
-            <h4 className="text">Product Images</h4>
-             <div className="imgGrid d-flex">
-             {
-              productImagesArr?.length !== 0   && productImagesArr?.map((item,index) =>{
-                return(
-                  <div className="img">
-                  <img
-                    src={item}
-                    alt="img"
-                  />
+              <div className="stickyBox">
+                <h4 className="text">Product Images</h4>
+                <div className="imgGrid d-flex">
+                  {productImagesArr?.length !== 0 &&
+                    productImagesArr?.map((item, index) => {
+                      return (
+                        <div className="img">
+                          <img src={item} alt="img" />
+                        </div>
+                      );
+                    })}
                 </div>
-                )
-              })
-             }                
               </div>
-             </div>
             </div>
           </div>
         </form>
