@@ -6,7 +6,8 @@ import Select from "@mui/material/Select";
 import Rating from "@mui/material/Rating";
 import { Button } from "@mui/material";
 import { FaCloudUploadAlt } from "react-icons/fa";
-import { fetchDataFromApi } from "../../utils/api";
+import { fetchDataFromApi, postData } from "../../utils/api";
+import { useNavigate } from "react-router-dom";
 
 const ProductUpload = () => {
   const [categoryValue, setCategoryValue] = useState("");
@@ -17,6 +18,7 @@ const ProductUpload = () => {
   const [isFeaturedValue, setisFeaturedValue] = useState(false);
   const [productImagesArr, setProductImagesArr] = useState([]);
   const [catData, setCatData] = useState([]);
+  const [count,setCount] = useState(0);
 
   const [formFields, setFormFields] = useState({
     name: "",
@@ -32,7 +34,7 @@ const ProductUpload = () => {
     quantity: [],
     rating: 0,
     brand: "",
-    images: [],
+    // images: [],
   });
 
   const productImages = useRef();
@@ -61,11 +63,12 @@ const ProductUpload = () => {
 
   const handleChangeCategory = (event) => {
     setCategoryValue(event.target.value);
+    setFormFields(() => ({
+      ...formFields,
+      category: event.target.value,
+    }));
   };
 
-  const handleChangeSubCategory = (event) => {
-    setSubCatVal(event.target.value);
-  };
   const handleChangeProductWeight = (event) => {
     const {
       target: { value },
@@ -84,7 +87,6 @@ const ProductUpload = () => {
       ...prevState,
       quantity: typeof value === "string" ? value.split(",") : value, // Ensure it's an array
     }));
-  
   };
 
   const handleChangeisFeaturedValue = (e) => {
@@ -95,24 +97,49 @@ const ProductUpload = () => {
     }));
   };
 
+ 
   const addProductImages = () => {
-    if (productImages.current.value) {
-      setProductImagesArr((prev) => [...prev, productImages.current.value]);
-      productImages.current.value = "";
-    }
+    setProductImagesArr(prevArray =>[...prevArray, productImages.current.value]);
+    productImages.current.value = "";
   };
 
-  const inputChange = (e) =>{
-    setFormFields(() =>({
+  const inputChange = (e) => {
+    setFormFields(() => ({
       ...formFields,
-      [e.target.name]:e.target.value,
-    }))
-  }
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   const addProduct = (e) => {
     e.preventDefault();
-    console.log(formFields);
+    formFields.images = productImagesArr
+    postData('/api/v1/create-product',formFields).then((res) =>{
+      setFormFields({
+        name: "",
+        description: "",
+        category: "",
+        subCategory: "",
+        price: 0,
+        oldPrice: 0,
+        isFeatured: false,
+        countInStock: 0,
+        discount: 0,
+        weight: [],
+        quantity: [],
+        rating: 0,
+        brand: "",
+        images:[]
+      })
+    })
+    
   };
+
+const navigate = useNavigate();
+
+const navigatePage = () => {
+    navigate("/product");
+  };
+
   return (
     <>
       <div className="right-content w-100">
@@ -138,7 +165,12 @@ const ProductUpload = () => {
                 <h5 className="mb-4">Product Information</h5>
                 <div className="form-group">
                   <h6>PRODUCT NANE</h6>
-                  <input type="text" placeholder="Product Name" name="name" onChange={inputChange} />
+                  <input
+                    type="text"
+                    placeholder="Product Name"
+                    name="name"
+                    onChange={inputChange}
+                  />
                 </div>
                 <div className="form-group">
                   <h6>PRODUCT DESCRIPTION</h6>
@@ -147,7 +179,8 @@ const ProductUpload = () => {
                     cols={10}
                     placeholder="Product Description"
                     className="mt-1"
-                    name="description" onChange={inputChange}
+                    name="description"
+                    onChange={inputChange}
                   />
                 </div>
 
@@ -167,9 +200,9 @@ const ProductUpload = () => {
                             <MenuItem
                               key={cat._id}
                               className="text-capitalize"
-                              value={cat.name}
+                              value={cat._id}
                             >
-                              {cat.name}
+                              {cat.name} {/* Display name, but value is _id */}
                             </MenuItem>
                           ))
                         ) : (
@@ -184,10 +217,9 @@ const ProductUpload = () => {
                       <h6>PRODUCT SUB CATEGORIES</h6>
                       <input
                         type="text"
-                        
                         placeholder="Add Product Sub-Category"
-                        name="subCategory" onChange={inputChange}
-
+                        name="subCategory"
+                        onChange={inputChange}
                       />
                     </div>
                   </div>
@@ -224,7 +256,7 @@ const ProductUpload = () => {
                       <h6 className="text-uppercase">is Featured</h6>
                       <Select
                         name="isFeatured"
-                        value={formFields.isFeatured.toString()} 
+                        value={formFields.isFeatured.toString()}
                         onChange={handleChangeisFeaturedValue}
                         displayEmpty
                         inputProps={{ "aria-label": "Without label" }}
@@ -289,6 +321,10 @@ const ProductUpload = () => {
                         value={ratingValue}
                         onChange={(event, newValue) => {
                           setRatingValue(newValue);
+                          setFormFields(() => ({
+                            ...formFields,
+                            rating: newValue,
+                          }));
                         }}
                         className="ratingSection"
                       />
@@ -352,7 +388,7 @@ const ProductUpload = () => {
                     </div>
                   </div>
                 </div>
-                <Button type="submit" className="btn-blue btn-lg btn-big">
+                <Button type="submit" className="btn-blue btn-lg btn-big" onClick={navigatePage}>
                   <FaCloudUploadAlt />
                   &nbsp;Publish Product
                 </Button>
@@ -367,7 +403,7 @@ const ProductUpload = () => {
                   {productImagesArr?.length !== 0 &&
                     productImagesArr?.map((item, index) => {
                       return (
-                        <div className="img">
+                        <div className="img" key={index}>
                           <img src={item} alt="img" />
                         </div>
                       );
