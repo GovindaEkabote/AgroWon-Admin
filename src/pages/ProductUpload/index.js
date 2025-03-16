@@ -131,14 +131,12 @@ const ProductUpload = () => {
         images:[]
       })
     })
-    
+    navigate("/product")
   };
 
 const navigate = useNavigate();
 
-const navigatePage = () => {
-    navigate("/product");
-  };
+
 
   return (
     <>
@@ -170,6 +168,7 @@ const navigatePage = () => {
                     placeholder="Product Name"
                     name="name"
                     onChange={inputChange}
+                    value={formFields.name}
                   />
                 </div>
                 <div className="form-group">
@@ -181,6 +180,7 @@ const navigatePage = () => {
                     className="mt-1"
                     name="description"
                     onChange={inputChange}
+                    value={formFields.description}
                   />
                 </div>
 
@@ -220,6 +220,7 @@ const navigatePage = () => {
                         placeholder="Add Product Sub-Category"
                         name="subCategory"
                         onChange={inputChange}
+                        value={formFields.subCategory}
                       />
                     </div>
                   </div>
@@ -234,6 +235,7 @@ const navigatePage = () => {
                         name="price"
                         onChange={inputChange}
                         placeholder="Product Price"
+                        value={formFields.price}
                       />
                     </div>
                   </div>
@@ -245,6 +247,7 @@ const navigatePage = () => {
                         name="oldPrice"
                         onChange={inputChange}
                         placeholder="Old Price "
+                        value={formFields.oldPrice}
                       />
                     </div>
                   </div>
@@ -273,6 +276,7 @@ const navigatePage = () => {
                       <input
                         type="text"
                         name="countInStock"
+                        value={formFields.countInStock}
                         onChange={inputChange}
                         placeholder="Enter Product Quentity"
                       />
@@ -287,6 +291,7 @@ const navigatePage = () => {
                         type="text"
                         name="discount"
                         onChange={inputChange}
+                        value={formFields.inputChange}
                         placeholder="Enter Discount Amount"
                       />
                     </div>
@@ -337,6 +342,7 @@ const navigatePage = () => {
                         type="text"
                         name="brand"
                         onChange={inputChange}
+                        value={formFields.inputChange}
                         placeholder="Product Brand Name"
                       />
                     </div>
@@ -374,6 +380,7 @@ const navigatePage = () => {
                               style={{ paddingRight: "100px" }}
                               placeholder="Please Enter Image URL"
                               name="images"
+                              value={formFields.images}
                               onChange={inputChange}
                             />
                             <Button
@@ -388,7 +395,7 @@ const navigatePage = () => {
                     </div>
                   </div>
                 </div>
-                <Button type="submit" className="btn-blue btn-lg btn-big" onClick={navigatePage}>
+                <Button type="submit" className="btn-blue btn-lg btn-big" >
                   <FaCloudUploadAlt />
                   &nbsp;Publish Product
                 </Button>
