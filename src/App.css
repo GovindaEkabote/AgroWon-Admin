@@ -1486,3 +1486,56 @@ body.dark .form .form-group .ratingSection svg {
     right: 10px;
     z-index: 100;
 }
+
+.imagesUploadBox {
+    width: 100%;
+    max-width: 100%;
+    flex-wrap: nowrap;
+    gap: 5px;
+    overflow-y: hidden;
+    overflow-x: auto; /* Enables horizontal scrolling */
+    display: flex; /* Ensures items stay in a row */
+    white-space: nowrap; /* Prevents wrapping */
+    padding-bottom: 5px; /* Optional: Adds some space for scrollbar */
+}
+
+.imagesUploadBox .uploadBox {
+    width: 150px;
+    height: 150px;
+    padding: 5px;
+    border: 1px dashed rgba(0, 0, 0, 0.3) !important;
+    border-radius: 10px;
+    position: relative;
+    align-items: center;
+    justify-self: center;
+    cursor: pointer !important;
+    flex-shrink: 0; /* Prevents shrinking inside flex container */
+}
+
+.imagesUploadBox .uploadBox input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+.imagesUploadBox .uploadBox .info {
+    align-items: center !important;
+    justify-self: center !important;
+    flex-direction: column;
+    margin-top: 20px;
+    pointer-events: none;
+}
+
+.imagesUploadBox .uploadBox h5 {
+    font-size: 15px !important;
+    align-items: center !important;
+    justify-self: center !important;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.2);
+}
+
+.imagesUploadBox .uploadBox .info svg {
+    font-size: 50px;
+    opacity: 0.3;
+}
