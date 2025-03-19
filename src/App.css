@@ -884,12 +884,15 @@ table td .imgWrapper {
 }
 
 table td .info h6 {
+    line-height: 18px;
+    overflow: hidden; 
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 6px;
 }
+
 
 .table td .old,
 .table td .new {
@@ -906,6 +909,7 @@ table td .info p {
     color: #818091;
     margin-bottom: 0px;
 }
+
 
 table.v-align td .productBox {
     width: 270px;
@@ -1486,6 +1490,7 @@ body.dark .form .form-group .ratingSection svg {
     right: 10px;
     z-index: 100;
 }
+
 
 .imagesUploadBox {
     width: 100%;

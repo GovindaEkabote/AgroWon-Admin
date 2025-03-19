@@ -21,6 +21,7 @@ function App() {
   const [isHideSidebarHeader, setisHideSidebarHeader] = useState(false);
   const [windowWidth,setWindowWidth] = useState(window.innerWidth)
   const [themeMode, setthemeMode] = useState(true);
+  const [baseUrl, setBaseUrl] = useState("http://localhost:4001/api/v1/get-product")
 
   useEffect(() => {
     if (themeMode === true) {
@@ -54,6 +55,7 @@ function App() {
     themeMode,
     setthemeMode,
     windowWidth,
+    baseUrl,
   };
 
   return (
