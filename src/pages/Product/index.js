@@ -18,9 +18,8 @@ import { GiPencil } from "react-icons/gi";
 import { MdDelete } from "react-icons/md";
 import Pagination from "@mui/material/Pagination";
 import { MyContext } from "../../App";
-
 import { deleteDataApi, fetchDataFromApi } from "../../utils/api";
-import { useNavigate } from "react-router-dom";
+
 
 const ITEM_HEIGHT = 48;
 
@@ -51,6 +50,9 @@ const Product = () => {
       });
     });
   };
+
+  
+  
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
