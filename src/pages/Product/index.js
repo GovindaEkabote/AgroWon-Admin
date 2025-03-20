@@ -19,7 +19,8 @@ import { MdDelete } from "react-icons/md";
 import Pagination from "@mui/material/Pagination";
 import { MyContext } from "../../App";
 
-import { fetchDataFromApi } from "../../utils/api";
+import { deleteDataApi, fetchDataFromApi } from "../../utils/api";
+import { useNavigate } from "react-router-dom";
 
 const ITEM_HEIGHT = 48;
 
@@ -28,7 +29,6 @@ const Product = () => {
   const [showBy, setShowBy] = useState("");
   const [showsetCatBy, setCatBy] = useState("");
   const [productList, setProductList] = useState([]);
-
   const context = useContext(MyContext);
 
   useEffect(() => {
@@ -43,6 +43,14 @@ const Product = () => {
       }
     });
   }, []);
+
+  const deleteProduct = (id) => {
+    deleteDataApi(`/api/v1/delete-product/${id}`).then((res) => {
+      fetchDataFromApi("/api/v1/get-product").then((res) => {
+        setProductList((prevList) => prevList.filter((product) => product._id !== id));
+      });
+    });
+  };
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -218,7 +226,11 @@ const Product = () => {
                         <div className="d-flex align-items-center productBox">
                           <div className="imgWrapper">
                             <div className="img">
-                            <img src={item.images?.[0]?.url} className="w-100" alt={item.name} />
+                              <img
+                                src={item.images?.[0]?.url}
+                                className="w-100"
+                                alt={item.name}
+                              />
                             </div>
                           </div>
                           <div className="info pl-0">
@@ -234,7 +246,9 @@ const Product = () => {
                           {item.oldPrice && (
                             <del className="old">₹{item.oldPrice}</del>
                           )}
-                          <span className="new text-danger">₹ {item.price}</span>
+                          <span className="new text-danger">
+                            ₹ {item.price}
+                          </span>
                         </div>
                       </td>
                       <td>{item.countInStock}</td>
@@ -251,7 +265,11 @@ const Product = () => {
                           <Button className="success" color="success">
                             <GiPencil />
                           </Button>
-                          <Button className="error" color="error">
+                          <Button
+                            className="error"
+                            color="error"
+                            onClick={() => deleteProduct(item._id)}
+                          >
                             <MdDelete />
                           </Button>
                         </div>
