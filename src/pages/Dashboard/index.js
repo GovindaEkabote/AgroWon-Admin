@@ -14,7 +14,7 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-
+import { fetchDataFromApi } from "../../utils/api";
 import { LuEyeClosed } from "react-icons/lu";
 import { GiPencil } from "react-icons/gi";
 import { MdDelete } from "react-icons/md";
@@ -30,11 +30,21 @@ const Dashboard = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [showBy, setShowBy] = useState("");
   const [showsetCatBy, setCatBy] = useState("");
+    const [productList, setProductList] = useState([]);
+  
 
   const context = useContext(MyContext);
   useEffect(() => {
     context.setisHideSidebarHeader(false);
     window.scrollTo(0, 0);
+     fetchDataFromApi("/api/v1/get-product").then((res) => {
+          console.log("API Response:", res); // Debugging step
+          if (res?.success && Array.isArray(res.products)) {
+            setProductList(res.products);
+          } else {
+            console.error("Invalid API response:", res);
+          }
+        });
   }, []);
 
   const handleChange = (e) => {
@@ -262,543 +272,60 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>#1</td>
-                  <td>
-                    <div className="d-flex align-items-center productBox">
-                      <div className="imgWrapper">
-                        <div className="img">
-                          <img src={img} alt="img" className="w-100" />
-                        </div>
-                      </div>
-                      <div className="info pl-0">
-                        <h6>Tops and skirt set for Female</h6>
-                        <p>
-                          Product Description Write here for a good proctice as
-                          Product Description Write here for a good proctice as
-                          Product Description Write here for a good proctice as
-                          Product Description Write here for a good proctice as
-                          Product Description Write here for a good proctice as
-                          Product Description Write here for a good proctice as
-                          Product Description Write here for a good proctice as
-                          Product Description Write here for a good proctice as
-                          Product Description Write here for a good proctice as
-                          Product Description Write here for a good proctice as
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>Woman</td>
-                  <td>Gucci</td>
-                  <td>
-                    <div>
-                      <del className="old">$12.5</del>
-                      <span className="new text-danger">$12.5</span>
-                    </div>
-                  </td>
-                  <td>30</td>
-                  <td>4.9(16)</td>
-                  <td>380</td>
-                  <td>38K</td>
-                  <td>
-                    <div className="actions d-flex align-items-center">
-                      <Button className="secondary" color="secondary">
-                        <LuEyeClosed />
-                      </Button>
-                      <Button className="success" color="success">
-                        <GiPencil />
-                      </Button>
-                      <Button className="error" color="error">
-                        <MdDelete />
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>#1</td>
-                  <td>
-                    <div className="d-flex align-items-center productBox">
-                      <div className="imgWrapper">
-                        <div className="img">
-                          <img src={img} alt="img" className="w-100" />
-                        </div>
-                      </div>
-                      <div className="info pl-0">
-                        <h6>Tops and skirt set for Female</h6>
-                        <p>
-                          Product Description Write here for a good proctice as
-                          per industry standard
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>Woman</td>
-                  <td>Gucci</td>
-                  <td>
-                    <div>
-                      <del className="old">$12.5</del>
-                      <span className="new text-danger">$12.5</span>
-                    </div>
-                  </td>
-                  <td>30</td>
-                  <td>4.9(16)</td>
-                  <td>380</td>
-                  <td>38K</td>
-                  <td>
-                    <div className="actions d-flex align-items-center">
-                      <Button className="secondary" color="secondary">
-                        <LuEyeClosed />
-                      </Button>
-                      <Button className="success" color="success">
-                        <GiPencil />
-                      </Button>
-                      <Button className="error" color="error">
-                        <MdDelete />
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>#1</td>
-                  <td>
-                    <div className="d-flex align-items-center productBox">
-                      <div className="imgWrapper">
-                        <div className="img">
-                          <img src={img} alt="img" className="w-100" />
-                        </div>
-                      </div>
-                      <div className="info pl-0">
-                        <h6>Tops and skirt set for Female</h6>
-                        <p>
-                          Product Description Write here for a good proctice as
-                          per industry standard
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>Woman</td>
-                  <td>Gucci</td>
-                  <td>
-                    <div>
-                      <del className="old">$12.5</del>
-                      <span className="new text-danger">$12.5</span>
-                    </div>
-                  </td>
-                  <td>30</td>
-                  <td>4.9(16)</td>
-                  <td>380</td>
-                  <td>38K</td>
-                  <td>
-                    <div className="actions d-flex align-items-center">
-                      <Button className="secondary" color="secondary">
-                        <LuEyeClosed />
-                      </Button>
-                      <Button className="success" color="success">
-                        <GiPencil />
-                      </Button>
-                      <Button className="error" color="error">
-                        <MdDelete />
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>#1</td>
-                  <td>
-                    <div className="d-flex align-items-center productBox">
-                      <div className="imgWrapper">
-                        <div className="img">
-                          <img src={img} alt="img" className="w-100" />
-                        </div>
-                      </div>
-                      <div className="info pl-0">
-                        <h6>Tops and skirt set for Female</h6>
-                        <p>
-                          Product Description Write here for a good proctice as
-                          per industry standard
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>Woman</td>
-                  <td>Gucci</td>
-                  <td>
-                    <div>
-                      <del className="old">$12.5</del>
-                      <span className="new text-danger">$12.5</span>
-                    </div>
-                  </td>
-                  <td>30</td>
-                  <td>4.9(16)</td>
-                  <td>380</td>
-                  <td>38K</td>
-                  <td>
-                    <div className="actions d-flex align-items-center">
-                      <Button className="secondary" color="secondary">
-                        <LuEyeClosed />
-                      </Button>
-                      <Button className="success" color="success">
-                        <GiPencil />
-                      </Button>
-                      <Button className="error" color="error">
-                        <MdDelete />
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>#1</td>
-                  <td>
-                    <div className="d-flex align-items-center productBox">
-                      <div className="imgWrapper">
-                        <div className="img">
-                          <img src={img} alt="img" className="w-100" />
-                        </div>
-                      </div>
-                      <div className="info pl-0">
-                        <h6>Tops and skirt set for Female</h6>
-                        <p>
-                          Product Description Write here for a good proctice as
-                          per industry standard
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>Woman</td>
-                  <td>Gucci</td>
-                  <td>
-                    <div>
-                      <del className="old">$12.5</del>
-                      <span className="new text-danger">$12.5</span>
-                    </div>
-                  </td>
-                  <td>30</td>
-                  <td>4.9(16)</td>
-                  <td>380</td>
-                  <td>38K</td>
-                  <td>
-                    <div className="actions d-flex align-items-center">
-                      <Button className="secondary" color="secondary">
-                        <LuEyeClosed />
-                      </Button>
-                      <Button className="success" color="success">
-                        <GiPencil />
-                      </Button>
-                      <Button className="error" color="error">
-                        <MdDelete />
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>#1</td>
-                  <td>
-                    <div className="d-flex align-items-center productBox">
-                      <div className="imgWrapper">
-                        <div className="img">
-                          <img src={img} alt="img" className="w-100" />
-                        </div>
-                      </div>
-                      <div className="info pl-0">
-                        <h6>Tops and skirt set for Female</h6>
-                        <p>
-                          Product Description Write here for a good proctice as
-                          per industry standard
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>Woman</td>
-                  <td>Gucci</td>
-                  <td>
-                    <div>
-                      <del className="old">$12.5</del>
-                      <span className="new text-danger">$12.5</span>
-                    </div>
-                  </td>
-                  <td>30</td>
-                  <td>4.9(16)</td>
-                  <td>380</td>
-                  <td>38K</td>
-                  <td>
-                    <div className="actions d-flex align-items-center">
-                      <Button className="secondary" color="secondary">
-                        <LuEyeClosed />
-                      </Button>
-                      <Button className="success" color="success">
-                        <GiPencil />
-                      </Button>
-                      <Button className="error" color="error">
-                        <MdDelete />
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>#1</td>
-                  <td>
-                    <div className="d-flex align-items-center productBox">
-                      <div className="imgWrapper">
-                        <div className="img">
-                          <img src={img} alt="img" className="w-100" />
-                        </div>
-                      </div>
-                      <div className="info pl-0">
-                        <h6>Tops and skirt set for Female</h6>
-                        <p>
-                          Product Description Write here for a good proctice as
-                          per industry standard
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>Woman</td>
-                  <td>Gucci</td>
-                  <td>
-                    <div>
-                      <del className="old">$12.5</del>
-                      <span className="new text-danger">$12.5</span>
-                    </div>
-                  </td>
-                  <td>30</td>
-                  <td>4.9(16)</td>
-                  <td>380</td>
-                  <td>38K</td>
-                  <td>
-                    <div className="actions d-flex align-items-center">
-                      <Button className="secondary" color="secondary">
-                        <LuEyeClosed />
-                      </Button>
-                      <Button className="success" color="success">
-                        <GiPencil />
-                      </Button>
-                      <Button className="error" color="error">
-                        <MdDelete />
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>#1</td>
-                  <td>
-                    <div className="d-flex align-items-center productBox">
-                      <div className="imgWrapper">
-                        <div className="img">
-                          <img src={img} alt="img" className="w-100" />
-                        </div>
-                      </div>
-                      <div className="info pl-0">
-                        <h6>Tops and skirt set for Female</h6>
-                        <p>
-                          Product Description Write here for a good proctice as
-                          per industry standard
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>Woman</td>
-                  <td>Gucci</td>
-                  <td>
-                    <div>
-                      <del className="old">$12.5</del>
-                      <span className="new text-danger">$12.5</span>
-                    </div>
-                  </td>
-                  <td>30</td>
-                  <td>4.9(16)</td>
-                  <td>380</td>
-                  <td>38K</td>
-                  <td>
-                    <div className="actions d-flex align-items-center">
-                      <Button className="secondary" color="secondary">
-                        <LuEyeClosed />
-                      </Button>
-                      <Button className="success" color="success">
-                        <GiPencil />
-                      </Button>
-                      <Button className="error" color="error">
-                        <MdDelete />
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>#1</td>
-                  <td>
-                    <div className="d-flex align-items-center productBox">
-                      <div className="imgWrapper">
-                        <div className="img">
-                          <img src={img} alt="img" className="w-100" />
-                        </div>
-                      </div>
-                      <div className="info pl-0">
-                        <h6>Tops and skirt set for Female</h6>
-                        <p>
-                          Product Description Write here for a good proctice as
-                          per industry standard
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>Woman</td>
-                  <td>Gucci</td>
-                  <td>
-                    <div>
-                      <del className="old">$12.5</del>
-                      <span className="new text-danger">$12.5</span>
-                    </div>
-                  </td>
-                  <td>30</td>
-                  <td>4.9(16)</td>
-                  <td>380</td>
-                  <td>38K</td>
-                  <td>
-                    <div className="actions d-flex align-items-center">
-                      <Button className="secondary" color="secondary">
-                        <LuEyeClosed />
-                      </Button>
-                      <Button className="success" color="success">
-                        <GiPencil />
-                      </Button>
-                      <Button className="error" color="error">
-                        <MdDelete />
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>#1</td>
-                  <td>
-                    <div className="d-flex align-items-center productBox">
-                      <div className="imgWrapper">
-                        <div className="img">
-                          <img src={img} alt="img" className="w-100" />
-                        </div>
-                      </div>
-                      <div className="info pl-0">
-                        <h6>Tops and skirt set for Female</h6>
-                        <p>
-                          Product Description Write here for a good proctice as
-                          per industry standard
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>Woman</td>
-                  <td>Gucci</td>
-                  <td>
-                    <div>
-                      <del className="old">$12.5</del>
-                      <span className="new text-danger">$12.5</span>
-                    </div>
-                  </td>
-                  <td>30</td>
-                  <td>4.9(16)</td>
-                  <td>380</td>
-                  <td>38K</td>
-                  <td>
-                    <div className="actions d-flex align-items-center">
-                      <Button className="secondary" color="secondary">
-                        <LuEyeClosed />
-                      </Button>
-                      <Button className="success" color="success">
-                        <GiPencil />
-                      </Button>
-                      <Button className="error" color="error">
-                        <MdDelete />
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>#1</td>
-                  <td>
-                    <div className="d-flex align-items-center productBox">
-                      <div className="imgWrapper">
-                        <div className="img">
-                          <img src={img} alt="img" className="w-100" />
-                        </div>
-                      </div>
-                      <div className="info pl-0">
-                        <h6>Tops and skirt set for Female</h6>
-                        <p>
-                          Product Description Write here for a good proctice as
-                          per industry standard
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>Woman</td>
-                  <td>Gucci</td>
-                  <td>
-                    <div>
-                      <del className="old">$12.5</del>
-                      <span className="new text-danger">$12.5</span>
-                    </div>
-                  </td>
-                  <td>30</td>
-                  <td>4.9(16)</td>
-                  <td>380</td>
-                  <td>38K</td>
-                  <td>
-                    <div className="actions d-flex align-items-center">
-                      <Button className="secondary" color="secondary">
-                        <LuEyeClosed />
-                      </Button>
-                      <Button className="success" color="success">
-                        <GiPencil />
-                      </Button>
-                      <Button className="error" color="error">
-                        <MdDelete />
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td>#1</td>
-                  <td>
-                    <div className="d-flex align-items-center productBox">
-                      <div className="imgWrapper">
-                        <div className="img">
-                          <img src={img} alt="img" className="w-100" />
-                        </div>
-                      </div>
-                      <div className="info pl-0">
-                        <h6>Tops and skirt set for Female</h6>
-                        <p>
-                          Product Description Write here for a good proctice as
-                          per industry standard
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>Woman</td>
-                  <td>Gucci</td>
-                  <td>
-                    <div>
-                      <del className="old">$12.5</del>
-                      <span className="new text-danger">$12.5</span>
-                    </div>
-                  </td>
-                  <td>30</td>
-                  <td>4.9(16)</td>
-                  <td>380</td>
-                  <td>38K</td>
-                  <td>
-                    <div className="actions d-flex align-items-center">
-                      <Button className="secondary" color="secondary">
-                        <LuEyeClosed />
-                      </Button>
-                      <Button className="success" color="success">
-                        <GiPencil />
-                      </Button>
-                      <Button className="error" color="error">
-                        <MdDelete />
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
+                             {productList.length > 0 ? (
+                               productList.map((item, index) => (
+                                 <tr key={item._id || index}>
+                                   <td>{index + 1}</td>
+                                   <td>
+                                     <div className="d-flex align-items-center productBox">
+                                       <div className="imgWrapper">
+                                         <div className="img">
+                                         <img src={item.images?.[0]?.url} className="w-100" alt={item.name} />
+                                         </div>
+                                       </div>
+                                       <div className="info pl-0">
+                                         <h6>{item.name}</h6>
+                                         <p>{item.description?.split("\n")[0]}</p>
+                                       </div>
+                                     </div>
+                                   </td>
+                                   <td>{item.category?.name || "N/A"}</td>
+                                   <td>{item.brand || "Unknown"}</td>
+                                   <td>
+                                     <div>
+                                       {item.oldPrice && (
+                                         <del className="old">₹{item.oldPrice}</del>
+                                       )}
+                                       <span className="new text-danger">₹ {item.price}</span>
+                                     </div>
+                                   </td>
+                                   <td>{item.countInStock}</td>
+                                   <td>
+                                     {item.rating} ({Math.floor(Math.random() * 50)})
+                                   </td>
+                                   <td>{Math.floor(Math.random() * 500)}</td>
+                                   <td>{Math.floor(Math.random() * 50)}K</td>
+                                   <td>
+                                     <div className="actions d-flex align-items-center">
+                                       <Button className="secondary" color="secondary">
+                                         <LuEyeClosed />
+                                       </Button>
+                                       <Button className="success" color="success">
+                                         <GiPencil />
+                                       </Button>
+                                       <Button className="error" color="error">
+                                         <MdDelete />
+                                       </Button>
+                                     </div>
+                                   </td>
+                                 </tr>
+                               ))
+                             ) : (
+                               <tr>
+                                 <td colSpan="10">No products found</td>
+                               </tr>
+                             )}
+                           </tbody>
             </table>
             <div className="d-flex tableFooter">
               <p>
