@@ -10,17 +10,22 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { FaRegClock } from "react-icons/fa";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { fetchDataFromApi } from "../../utils/api";
+import {
+  fetchDataFromApi,
+  deleteDataApi,
+  editDataFromApi,
+} from "../../utils/api";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import TextField from "@mui/material/TextField";
 import { LuEyeClosed } from "react-icons/lu";
 import { GiPencil } from "react-icons/gi";
 import { MdDelete } from "react-icons/md";
-
-import img from "../../assets/images/Govinda.jpg";
-
 import Pagination from "@mui/material/Pagination";
 import { MyContext } from "../../App";
 
@@ -30,25 +35,75 @@ const Dashboard = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [showBy, setShowBy] = useState("");
   const [showsetCatBy, setCatBy] = useState("");
-    const [productList, setProductList] = useState([]);
-  
+  const [productList, setProductList] = useState([]);
+  const [editId, setEditId] = useState(null);
+  const [opens, setOpens] = useState(false);
+  const [formFields, setFormFields] = useState({
+    name: "",
+    description: "",
+    brand: "",
+    price: 10,
+    countInStock: 1,
+    ifFeatured: "",
+    subCategory: "",
+  });
+
+  const handleClosed = () => {
+    setOpens(false);
+  };
 
   const context = useContext(MyContext);
   useEffect(() => {
     context.setisHideSidebarHeader(false);
     window.scrollTo(0, 0);
-     fetchDataFromApi("/api/v1/get-product").then((res) => {
-          console.log("API Response:", res); // Debugging step
-          if (res?.success && Array.isArray(res.products)) {
-            setProductList(res.products);
-          } else {
-            console.error("Invalid API response:", res);
-          }
-        });
+    fetchDataFromApi("/api/v1/get-product").then((res) => {
+      console.log("API Response:", res); // Debugging step
+      if (res?.success && Array.isArray(res.products)) {
+        setProductList(res.products);
+      } else {
+        console.error("Invalid API response:", res);
+      }
+    });
   }, []);
 
-  const handleChange = (e) => {
-    setShowBy(e.target.value);
+  const deleteProduct = (id) => {
+    deleteDataApi(`/api/v1/delete-product/${id}`).then((res) => {
+      fetchDataFromApi("/api/v1/get-product").then((res) => {
+        setProductList((prevList) =>
+          prevList.filter((product) => product._id !== id)
+        );
+      });
+    });
+  };
+
+  const editCategory = (id) => {
+    const selectedProduct = productList.find((item) => item._id === id);
+    if (selectedProduct) {
+      setEditId(id);
+      setFormFields({
+        name: selectedProduct.name,
+        description: selectedProduct.description,
+        brand: selectedProduct.brand,
+        price: selectedProduct.price,
+        countInStock: selectedProduct.countInStock,
+      });
+    }
+    setOpens(true);
+  };
+
+  const categoryEditSubmit = (id) => {
+    // e.preventDefault();
+    editDataFromApi(`/api/v1/update/${editId}`, formFields).then((result) => {
+      fetchDataFromApi("/api/v1/get-product").then((res) => {
+        setProductList((prevList) =>
+          prevList.filter((product) => product._id !== id)
+        );
+      });
+    });
+  };
+
+  const changeInput = (e) => {
+    setFormFields(() => ({ ...formFields, [e.target.name]: e.target.value }));
   };
 
   const open = Boolean(anchorEl);
@@ -272,60 +327,74 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                             {productList.length > 0 ? (
-                               productList.map((item, index) => (
-                                 <tr key={item._id || index}>
-                                   <td>{index + 1}</td>
-                                   <td>
-                                     <div className="d-flex align-items-center productBox">
-                                       <div className="imgWrapper">
-                                         <div className="img">
-                                         <img src={item.images?.[0]?.url} className="w-100" alt={item.name} />
-                                         </div>
-                                       </div>
-                                       <div className="info pl-0">
-                                         <h6>{item.name}</h6>
-                                         <p>{item.description?.split("\n")[0]}</p>
-                                       </div>
-                                     </div>
-                                   </td>
-                                   <td>{item.category?.name || "N/A"}</td>
-                                   <td>{item.brand || "Unknown"}</td>
-                                   <td>
-                                     <div>
-                                       {item.oldPrice && (
-                                         <del className="old">₹{item.oldPrice}</del>
-                                       )}
-                                       <span className="new text-danger">₹ {item.price}</span>
-                                     </div>
-                                   </td>
-                                   <td>{item.countInStock}</td>
-                                   <td>
-                                     {item.rating} ({Math.floor(Math.random() * 50)})
-                                   </td>
-                                   <td>{Math.floor(Math.random() * 500)}</td>
-                                   <td>{Math.floor(Math.random() * 50)}K</td>
-                                   <td>
-                                     <div className="actions d-flex align-items-center">
-                                       <Button className="secondary" color="secondary">
-                                         <LuEyeClosed />
-                                       </Button>
-                                       <Button className="success" color="success">
-                                         <GiPencil />
-                                       </Button>
-                                       <Button className="error" color="error">
-                                         <MdDelete />
-                                       </Button>
-                                     </div>
-                                   </td>
-                                 </tr>
-                               ))
-                             ) : (
-                               <tr>
-                                 <td colSpan="10">No products found</td>
-                               </tr>
-                             )}
-                           </tbody>
+                {productList.length > 0 ? (
+                  productList.map((item, index) => (
+                    <tr key={item._id || index}>
+                      <td>{index + 1}</td>
+                      <td>
+                        <div className="d-flex align-items-center productBox">
+                          <div className="imgWrapper">
+                            <div className="img">
+                              <img
+                                src={item.images?.[0]?.url}
+                                className="w-100"
+                                alt={item.name}
+                              />
+                            </div>
+                          </div>
+                          <div className="info pl-0">
+                            <h6>{item.name}</h6>
+                            <p>{item.description?.split("\n")[0]}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td>{item.category?.name || "N/A"}</td>
+                      <td>{item.brand || "Unknown"}</td>
+                      <td>
+                        <div>
+                          {item.oldPrice && (
+                            <del className="old">₹{item.oldPrice}</del>
+                          )}
+                          <span className="new text-danger">
+                            ₹ {item.price}
+                          </span>
+                        </div>
+                      </td>
+                      <td>{item.countInStock}</td>
+                      <td>
+                        {item.rating} ({Math.floor(Math.random() * 50)})
+                      </td>
+                      <td>{Math.floor(Math.random() * 500)}</td>
+                      <td>{Math.floor(Math.random() * 50)}K</td>
+                      <td>
+                        <div className="actions d-flex align-items-center">
+                          <Button className="secondary" color="secondary">
+                            <LuEyeClosed />
+                          </Button>
+                          <Button
+                            className="success"
+                            color="success"
+                            onClick={() => editCategory(item._id)}
+                          >
+                            <GiPencil />
+                          </Button>
+                          <Button
+                            className="error"
+                            color="error"
+                            onClick={() => deleteProduct(item._id)}
+                          >
+                            <MdDelete />
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="10">No products found</td>
+                  </tr>
+                )}
+              </tbody>
             </table>
             <div className="d-flex tableFooter">
               <p>
@@ -342,6 +411,72 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      <Dialog open={opens} onClose={handleClosed}>
+        <form onSubmit={categoryEditSubmit}>
+          <DialogContent>
+            <DialogContentText>Edit Product</DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              name="name"
+              label="Product Name"
+              type="text"
+              fullWidth
+              value={formFields.name || ""}
+              onChange={changeInput}
+            />
+
+            <TextField
+              margin="dense"
+              name="description"
+              label="Description"
+              type="text"
+              fullWidth
+              value={formFields.description || ""}
+              onChange={changeInput}
+            />
+
+            <TextField
+              margin="dense"
+              name="brand"
+              label="Brand"
+              type="text"
+              fullWidth
+              value={formFields.brand || ""}
+              onChange={changeInput}
+            />
+
+            <TextField
+              margin="dense"
+              name="price"
+              label="Price"
+              type="number"
+              fullWidth
+              value={formFields.price || ""}
+              onChange={changeInput}
+            />
+
+            <TextField
+              margin="dense"
+              name="countInStock"
+              label="Stock"
+              type="number"
+              fullWidth
+              value={formFields.countInStock || ""}
+              onChange={changeInput}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClosed} color="secondary">
+              Cancel
+            </Button>
+            <Button type="submit" color="primary" onClick={handleClosed}>
+              Save
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
     </>
   );
 };
