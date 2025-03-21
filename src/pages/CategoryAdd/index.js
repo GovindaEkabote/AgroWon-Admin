@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { MdReply } from "react-icons/md";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
-
 import DialogTitle from "@mui/material/DialogTitle";
 
 const CategoryAdd = () => {
@@ -142,6 +141,7 @@ const CategoryAdd = () => {
           </div>
         </form>
       </div>
+      
       <Dialog
         open={open}
         onClose={handleClose}

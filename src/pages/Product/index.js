@@ -18,8 +18,16 @@ import { GiPencil } from "react-icons/gi";
 import { MdDelete } from "react-icons/md";
 import Pagination from "@mui/material/Pagination";
 import { MyContext } from "../../App";
-import { deleteDataApi, fetchDataFromApi } from "../../utils/api";
-
+import {
+  deleteDataApi,
+  editDataFromApi,
+  fetchDataFromApi,
+} from "../../utils/api";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import TextField from "@mui/material/TextField";
 
 const ITEM_HEIGHT = 48;
 
@@ -28,13 +36,27 @@ const Product = () => {
   const [showBy, setShowBy] = useState("");
   const [showsetCatBy, setCatBy] = useState("");
   const [productList, setProductList] = useState([]);
+  const [editId, setEditId] = useState(null);
   const context = useContext(MyContext);
+
+  const [formFields, setFormFields] = useState({
+    name: "",
+    description: "",
+    brand: "",
+    price: 10,
+    countInStock: 1,
+    ifFeatured: "",
+    subCategory: "",
+  });
+  const [opens, setOpens] = useState(false);
+
+  const handleClosed = () => {
+    setOpens(false);
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
     fetchDataFromApi("/api/v1/get-product").then((res) => {
-      console.log("API Response:", res); // Debugging step
       if (res?.success && Array.isArray(res.products)) {
         setProductList(res.products);
       } else {
@@ -46,13 +68,42 @@ const Product = () => {
   const deleteProduct = (id) => {
     deleteDataApi(`/api/v1/delete-product/${id}`).then((res) => {
       fetchDataFromApi("/api/v1/get-product").then((res) => {
-        setProductList((prevList) => prevList.filter((product) => product._id !== id));
+        setProductList((prevList) =>
+          prevList.filter((product) => product._id !== id)
+        );
       });
     });
   };
 
-  
-  
+  const editCategory = (id) => {
+    const selectedProduct = productList.find((item) => item._id === id);
+    if (selectedProduct) {
+      setEditId(id);
+      setFormFields({
+        name: selectedProduct.name,
+        description: selectedProduct.description,
+        brand: selectedProduct.brand,
+        price: selectedProduct.price,
+        countInStock: selectedProduct.countInStock,
+      });
+    }
+    setOpens(true); 
+  };
+
+  const categoryEditSubmit = (id) => {
+    // e.preventDefault();
+    editDataFromApi(`/api/v1/update/${editId}`, formFields).then((result) => {
+      fetchDataFromApi("/api/v1/get-product").then((res) => {
+        setProductList((prevList) =>
+          prevList.filter((product) => product._id !== id)
+        );
+      });
+    });
+  };
+
+  const changeInput = (e) => {
+    setFormFields(() => ({ ...formFields, [e.target.name]: e.target.value }));
+  };
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -264,7 +315,11 @@ const Product = () => {
                           <Button className="secondary" color="secondary">
                             <LuEyeClosed />
                           </Button>
-                          <Button className="success" color="success">
+                          <Button
+                            className="success"
+                            color="success"
+                            onClick={() => editCategory(item._id)}
+                          >
                             <GiPencil />
                           </Button>
                           <Button
@@ -300,6 +355,72 @@ const Product = () => {
           </div>
         </div>
       </div>
+
+      <Dialog open={opens} onClose={handleClosed}>
+        <form onSubmit={categoryEditSubmit}>
+          <DialogContent>
+            <DialogContentText>Edit Product</DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              name="name"
+              label="Product Name"
+              type="text"
+              fullWidth
+              value={formFields.name || ""}
+              onChange={changeInput}
+            />
+
+            <TextField
+              margin="dense"
+              name="description"
+              label="Description"
+              type="text"
+              fullWidth
+              value={formFields.description || ""}
+              onChange={changeInput}
+            />
+
+            <TextField
+              margin="dense"
+              name="brand"
+              label="Brand"
+              type="text"
+              fullWidth
+              value={formFields.brand || ""}
+              onChange={changeInput}
+            />
+
+            <TextField
+              margin="dense"
+              name="price"
+              label="Price"
+              type="number"
+              fullWidth
+              value={formFields.price || ""}
+              onChange={changeInput}
+            />
+
+            <TextField
+              margin="dense"
+              name="countInStock"
+              label="Stock"
+              type="number"
+              fullWidth
+              value={formFields.countInStock || ""}
+              onChange={changeInput}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClosed} color="secondary">
+              Cancel
+            </Button>
+            <Button type="submit" color="primary" onClick={handleClosed}>
+              Save
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
     </>
   );
 };
