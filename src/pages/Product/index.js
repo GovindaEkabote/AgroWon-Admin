@@ -347,9 +347,6 @@ const Product = () => {
               </tbody>
             </table>
             <div className="d-flex tableFooter">
-              <p>
-                Showing <b>12</b> of <b>60</b> result
-              </p>
               <Pagination
                 count={productList?.totalPages}
                 color="primary"

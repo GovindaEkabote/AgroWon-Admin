@@ -119,6 +119,20 @@ const Dashboard = () => {
     setAnchorEl(null);
   };
 
+  const totalProduct = (page) => {
+    fetchDataFromApi(`/api/v1/get-product?page=${page}`).then((result) => {
+      console.log("Fetched Data:", result); // Debugging
+  
+      setProductList({
+        products: result.products || [],
+        totalPages: result.totalPages || 1,
+        totalPosts: result.totalPosts || 0, // ✅ Ensure this is stored
+      });
+    });
+  }
+  useEffect(()=>{
+    totalProduct();
+  },[]);
   return (
     <>
       <div className="right-content w-100">
@@ -142,7 +156,7 @@ const Dashboard = () => {
                 color={["#7978E9", "#b2b1f2"]}
                 icon={<FaBagShopping />}
                 name={"Total Products"}
-                number={27}
+                number={productList?.totalPosts || 0}
               />
               <DashboardBox
                 color={["#F3797E", "#f2bdbf"]}
