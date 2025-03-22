@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import DashboardBox from "../Dashboard/components/DashboardBox";
 import { FaRegUser } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
@@ -17,7 +17,6 @@ import { LuEyeClosed } from "react-icons/lu";
 import { GiPencil } from "react-icons/gi";
 import { MdDelete } from "react-icons/md";
 import Pagination from "@mui/material/Pagination";
-import { MyContext } from "../../App";
 import {
   deleteDataApi,
   editDataFromApi,
@@ -37,7 +36,7 @@ const Product = () => {
   const [showsetCatBy, setCatBy] = useState("");
   const [productList, setProductList] = useState([]);
   const [editId, setEditId] = useState(null);
-  const context = useContext(MyContext);
+
 
   const [formFields, setFormFields] = useState({
     name: "",
@@ -68,25 +67,29 @@ const Product = () => {
   const deleteProduct = (id) => {
     deleteDataApi(`/api/v1/delete-product/${id}`).then((res) => {
       fetchDataFromApi("/api/v1/get-product").then((res) => {
-        setProductList((prevList) =>
-          prevList.filter((product) => product._id !== id)
-        );
+        setProductList(res);
       });
     });
   };
 
-  const editCategory = (id) => {
-    const selectedProduct = productList.find((item) => item._id === id);
-    if (selectedProduct) {
-      setEditId(id);
+  const editCategory =async (id) => {
+    setFormFields({
+      name: "",
+      description:"",
+      brand:"",
+      price:"",
+      countInStock:"",
+    });
+    setOpens(true);
+    setEditId(id);
+    const selectedProduct = await fetchDataFromApi(`/api/v1/get/${id}`);
       setFormFields({
-        name: selectedProduct.name,
-        description: selectedProduct.description,
-        brand: selectedProduct.brand,
-        price: selectedProduct.price,
-        countInStock: selectedProduct.countInStock,
+        name: selectedProduct.product.name,
+        description: selectedProduct.product.description,
+        brand: selectedProduct.product.brand,
+        price: selectedProduct.product.price,
+        countInStock: selectedProduct.product.countInStock,
       });
-    }
     setOpens(true);
   };
 

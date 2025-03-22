@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import DashboardBox from "./components/DashboardBox";
 import { FaRegUser } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
@@ -27,7 +27,6 @@ import { LuEyeClosed } from "react-icons/lu";
 import { GiPencil } from "react-icons/gi";
 import { MdDelete } from "react-icons/md";
 import Pagination from "@mui/material/Pagination";
-import { MyContext } from "../../App";
 
 const ITEM_HEIGHT = 48;
 
@@ -51,53 +50,56 @@ const Dashboard = () => {
   const handleClosed = () => {
     setOpens(false);
   };
-
-  const context = useContext(MyContext);
   
   useEffect(() => {
-    context.setisHideSidebarHeader(false);
     window.scrollTo(0, 0);
     fetchDataFromApi("/api/v1/get-product").then((res) => {
-      if (res?.success && Array.isArray(res.products)) {
-        setProductList(res.products);
-      } else {
-        console.error("Invalid API response:", res);
-      }
+        setProductList(res);
     });
   }, []);
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+ const editCategory =async (id) => {
+     setFormFields({
+       name: "",
+       description:"",
+       brand:"",
+       price:"",
+       countInStock:"",
+     });
+     setOpens(true);
+     setEditId(id);
+     const selectedProduct = await fetchDataFromApi(`/api/v1/get/${id}`);
+       setFormFields({
+         name: selectedProduct.product.name,
+         description: selectedProduct.product.description,
+         brand: selectedProduct.product.brand,
+         price: selectedProduct.product.price,
+         countInStock: selectedProduct.product.countInStock,
+       });
+     setOpens(true);
+   };
+
+  const categoryEditSubmit = (e) => {
+    e.preventDefault();
+    editDataFromApi(`/api/v1/update/${editId}`, formFields).then((result) => {
+      fetchDataFromApi("/api/v1/get-product").then((res) => {
+        setProductList(res);
+      });
+    });
+  };
+
+  const changeInput = (e) => {
+    setFormFields(() => ({ ...formFields, [e.target.name]: e.target.value }));
+  };
 
   const deleteProduct = (id) => {
     deleteDataApi(`/api/v1/delete-product/${id}`).then((res) => {
       fetchDataFromApi("/api/v1/get-product").then((res) => {
-        setProductList((prevList) =>
-          prevList.filter((product) => product._id !== id)
-        );
-      });
-    });
-  };
-
-  const editCategory = (id) => {
-    const selectedProduct = productList.find((item) => item._id === id);
-    if (selectedProduct) {
-      setEditId(id);
-      setFormFields({
-        name: selectedProduct.name,
-        description: selectedProduct.description,
-        brand: selectedProduct.brand,
-        price: selectedProduct.price,
-        countInStock: selectedProduct.countInStock,
-      });
-    }
-    setOpens(true);
-  };
-
-  const categoryEditSubmit = (id) => {
-    // e.preventDefault();
-    editDataFromApi(`/api/v1/update/${editId}`, formFields).then((result) => {
-      fetchDataFromApi("/api/v1/get-product").then((res) => {
-        setProductList((prevList) =>
-          prevList.filter((product) => product._id !== id)
-        );
+        setProductList(res);
       });
     });
   };
@@ -105,29 +107,21 @@ const Dashboard = () => {
   const handleChange = (event, value) => {
     fetchDataFromApi(`/api/v1/get-product?page=${value}`).then((result) => {
       setProductList(result);
+      console.log(result);
     });
   };
-  const changeInput = (e) => {
-    setFormFields(() => ({ ...formFields, [e.target.name]: e.target.value }));
-  };
+
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+ 
 
   const totalProduct = (page) => {
     fetchDataFromApi(`/api/v1/get-product?page=${page}`).then((result) => {
       console.log("Fetched Data:", result); // Debugging
-  
-      setProductList({
-        products: result.products || [],
-        totalPages: result.totalPages || 1,
-        totalPosts: result.totalPosts || 0, // ✅ Ensure this is stored
-      });
+      setProductList(result.products || []);
     });
   }
   useEffect(()=>{
@@ -346,8 +340,8 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {productList?.products?.length !== 0? (
-                  productList?.products?.map((item, index) => (
+              {productList?.products?.length !== 0 ? (
+                productList?.products?.map((item, index) => (
                     <tr key={item._id || index}>
                       <td>{index + 1}</td>
                       <td>
