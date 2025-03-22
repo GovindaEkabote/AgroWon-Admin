@@ -53,11 +53,11 @@ const Dashboard = () => {
   };
 
   const context = useContext(MyContext);
+  
   useEffect(() => {
     context.setisHideSidebarHeader(false);
     window.scrollTo(0, 0);
     fetchDataFromApi("/api/v1/get-product").then((res) => {
-      console.log("API Response:", res); // Debugging step
       if (res?.success && Array.isArray(res.products)) {
         setProductList(res.products);
       } else {
@@ -102,6 +102,11 @@ const Dashboard = () => {
     });
   };
 
+  const handleChange = (event, value) => {
+    fetchDataFromApi(`/api/v1/get-product?page=${value}`).then((result) => {
+      setProductList(result);
+    });
+  };
   const changeInput = (e) => {
     setFormFields(() => ({ ...formFields, [e.target.name]: e.target.value }));
   };
@@ -327,8 +332,8 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {productList.length > 0 ? (
-                  productList.map((item, index) => (
+                {productList?.products?.length !== 0? (
+                  productList?.products?.map((item, index) => (
                     <tr key={item._id || index}>
                       <td>{index + 1}</td>
                       <td>
@@ -397,15 +402,13 @@ const Dashboard = () => {
               </tbody>
             </table>
             <div className="d-flex tableFooter">
-              <p>
-                Showing <b>12</b> of <b>60</b> result
-              </p>
               <Pagination
-                count={50}
+                count={productList?.totalPages} 
                 color="primary"
                 className="pagination"
                 showFirstButton
                 showLastButton
+                onChange={handleChange}
               />
             </div>
           </div>

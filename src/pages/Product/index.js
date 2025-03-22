@@ -87,7 +87,7 @@ const Product = () => {
         countInStock: selectedProduct.countInStock,
       });
     }
-    setOpens(true); 
+    setOpens(true);
   };
 
   const categoryEditSubmit = (id) => {
@@ -98,6 +98,12 @@ const Product = () => {
           prevList.filter((product) => product._id !== id)
         );
       });
+    });
+  };
+
+  const handleChange = (event, value) => {
+    fetchDataFromApi(`/api/v1/get-product?page=${value}`).then((result) => {
+      setProductList(result);
     });
   };
 
@@ -271,8 +277,8 @@ const Product = () => {
               </thead>
 
               <tbody>
-                {productList.length > 0 ? (
-                  productList.map((item, index) => (
+                {productList?.products?.length !== 0 ? (
+                  productList?.products?.map((item, index) => (
                     <tr key={item._id || index}>
                       <td>{index + 1}</td>
                       <td>
@@ -345,11 +351,12 @@ const Product = () => {
                 Showing <b>12</b> of <b>60</b> result
               </p>
               <Pagination
-                count={50}
+                count={productList?.totalPages}
                 color="primary"
                 className="pagination"
                 showFirstButton
                 showLastButton
+                onChange={handleChange}
               />
             </div>
           </div>

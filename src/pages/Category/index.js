@@ -20,7 +20,7 @@ const Category = () => {
   const [open, setOpen] = React.useState(false);
   const [page, setPage] = useState(1);
   // const [editFields, setEditFields] = useState({});
-  const [editId, setEditId] = useState(null);
+  const [editId, setEditId] =  useState(null);
   const [formFields, setFormFields] = useState({
     name: "",
     images: [],
