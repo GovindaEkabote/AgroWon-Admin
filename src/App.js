@@ -45,6 +45,10 @@ function App() {
     }
   },[])
 
+  useEffect(() =>{
+    
+  })
+
   const values = {
     isToggleSlider,
     setIsToggleSlider,

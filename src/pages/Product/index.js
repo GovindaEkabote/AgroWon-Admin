@@ -17,6 +17,7 @@ import { LuEyeClosed } from "react-icons/lu";
 import { GiPencil } from "react-icons/gi";
 import { MdDelete } from "react-icons/md";
 import Pagination from "@mui/material/Pagination";
+import { Link } from "react-router";
 import {
   deleteDataApi,
   editDataFromApi,
@@ -37,7 +38,6 @@ const Product = () => {
   const [productList, setProductList] = useState([]);
   const [editId, setEditId] = useState(null);
 
-
   const [formFields, setFormFields] = useState({
     name: "",
     description: "",
@@ -46,6 +46,7 @@ const Product = () => {
     countInStock: 1,
     ifFeatured: "",
     subCategory: "",
+    category: "",
   });
   const [opens, setOpens] = useState(false);
 
@@ -53,6 +54,13 @@ const Product = () => {
     setOpens(false);
   };
 
+  const handleChangeCategory = (e) => {
+    setCatBy(e.target.value);
+    setFormFields(() => ({
+      ...formFields,
+      category: e.target.value,
+    }));
+  };
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchDataFromApi("/api/v1/get-product").then((res) => {
@@ -72,24 +80,24 @@ const Product = () => {
     });
   };
 
-  const editCategory =async (id) => {
+  const editCategory = async (id) => {
     setFormFields({
       name: "",
-      description:"",
-      brand:"",
-      price:"",
-      countInStock:"",
+      description: "",
+      brand: "",
+      price: "",
+      countInStock: "",
     });
     setOpens(true);
     setEditId(id);
     const selectedProduct = await fetchDataFromApi(`/api/v1/get/${id}`);
-      setFormFields({
-        name: selectedProduct.product.name,
-        description: selectedProduct.product.description,
-        brand: selectedProduct.product.brand,
-        price: selectedProduct.product.price,
-        countInStock: selectedProduct.product.countInStock,
-      });
+    setFormFields({
+      name: selectedProduct.product.name,
+      description: selectedProduct.product.description,
+      brand: selectedProduct.product.brand,
+      price: selectedProduct.product.price,
+      countInStock: selectedProduct.product.countInStock,
+    });
     setOpens(true);
   };
 
@@ -250,13 +258,19 @@ const Product = () => {
                   labelId="demo-simple-select-helper-label"
                   id="demo-simple-select-helper"
                   value={showsetCatBy}
-                  onChange={(e) => setCatBy(e.target.value)}
+                  onChange={handleChangeCategory}
                   className="w-100"
                 >
-                  <MenuItem value="None">None</MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                <MenuItem value={null}>Null</MenuItem>
+                  {productList?.products?.length > 0 ? (
+                    productList?.products?.map((item) => (
+                      <MenuItem key={item._id} value={item.name}>
+                        {item.category?.name}
+                      </MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem disabled>No categories found</MenuItem>
+                  )}
                 </Select>
               </FormControl>
             </div>
@@ -322,7 +336,9 @@ const Product = () => {
                       <td>
                         <div className="actions d-flex align-items-center">
                           <Button className="secondary" color="secondary">
-                            <LuEyeClosed />
+                            <Link to="/product/details">
+                              <LuEyeClosed />
+                            </Link>
                           </Button>
                           <Button
                             className="success"
