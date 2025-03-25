@@ -34,7 +34,8 @@ const ITEM_HEIGHT = 48;
 const Product = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [showBy, setShowBy] = useState("");
-  const [showsetCatBy, setCatBy] = useState("");
+  const [showsetCatBy, setShowsetCatBy] = useState(""); // Selected category
+  const [catData, setCatData] = useState({ categoryList: [] }); // Ensure correct structure
   const [productList, setProductList] = useState([]);
   const [editId, setEditId] = useState(null);
 
@@ -54,13 +55,17 @@ const Product = () => {
     setOpens(false);
   };
 
+  useEffect(() => {
+    fetchDataFromApi("/api/v1/get-category").then((result) => {
+      setCatData(result);
+    });
+  }, []);
+
+  // Handle category selection
   const handleChangeCategory = (e) => {
-    setCatBy(e.target.value);
-    setFormFields(() => ({
-      ...formFields,
-      category: e.target.value,
-    }));
+    setShowsetCatBy(e.target.value);
   };
+
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchDataFromApi("/api/v1/get-product").then((res) => {
@@ -261,16 +266,13 @@ const Product = () => {
                   onChange={handleChangeCategory}
                   className="w-100"
                 >
-                <MenuItem value={null}>Null</MenuItem>
-                  {productList?.products?.length > 0 ? (
-                    productList?.products?.map((item) => (
-                      <MenuItem key={item._id} value={item.name}>
-                        {item.category?.name}
+                  <MenuItem value="">None</MenuItem>
+                  {catData?.categoryList?.length > 0 &&
+                    catData.categoryList.map((item, index) => (
+                      <MenuItem key={item._id || index} value={item.name}>
+                        {item.name}
                       </MenuItem>
-                    ))
-                  ) : (
-                    <MenuItem disabled>No categories found</MenuItem>
-                  )}
+                    ))}
                 </Select>
               </FormControl>
             </div>

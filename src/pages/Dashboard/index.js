@@ -33,7 +33,8 @@ const ITEM_HEIGHT = 48;
 const Dashboard = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [showBy, setShowBy] = useState("");
-  const [showsetCatBy, setCatBy] = useState("");
+   const [showsetCatBy, setShowsetCatBy] = useState(""); // Selected category
+    const [catData, setCatData] = useState({ categoryList: [] });
   const [productList, setProductList] = useState([]);
   const [editId, setEditId] = useState(null);
   const [opens, setOpens] = useState(false);
@@ -50,6 +51,18 @@ const Dashboard = () => {
   const handleClosed = () => {
     setOpens(false);
   };
+
+ useEffect(() => {
+     fetchDataFromApi("/api/v1/get-category").then((result) => {
+       setCatData(result);
+     });
+   }, []);
+ 
+   // Handle category selection
+   const handleChangeCategory = (e) => {
+     setShowsetCatBy(e.target.value);
+   };
+ 
   
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -257,15 +270,16 @@ const Dashboard = () => {
                   labelId="demo-simple-select-helper-label"
                   id="demo-simple-select-helper"
                   value={showsetCatBy}
-                  onChange={(e) => setCatBy(e.target.value)}
+                  onChange={handleChangeCategory}
                   className="w-100"
                 >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  <MenuItem value="">None</MenuItem>
+                  {catData?.categoryList?.length > 0 &&
+                    catData.categoryList.map((item, index) => (
+                      <MenuItem key={item._id || index} value={item.name}>
+                        {item.name}
+                      </MenuItem>
+                    ))}
                 </Select>
               </FormControl>
             </div>
