@@ -1,18 +1,5 @@
 import React, { useEffect, useState } from "react";
-import DashboardBox from "../Dashboard/components/DashboardBox";
-import { FaRegUser } from "react-icons/fa";
-import { TiShoppingCart } from "react-icons/ti";
-import { FaBagShopping } from "react-icons/fa6";
-import { WiStars } from "react-icons/wi";
 import { Button } from "@mui/material";
-import { RxDotsVertical } from "react-icons/rx";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import { FaRegClock } from "react-icons/fa";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import { LuEyeClosed } from "react-icons/lu";
 import { GiPencil } from "react-icons/gi";
 import { MdDelete } from "react-icons/md";
@@ -29,25 +16,25 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import TextField from "@mui/material/TextField";
 
-const ITEM_HEIGHT = 48;
-
 const Product = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [showBy, setShowBy] = useState("");
-  const [showsetCatBy, setShowsetCatBy] = useState(""); // Selected category
   const [catData, setCatData] = useState({ categoryList: [] }); // Ensure correct structure
   const [productList, setProductList] = useState([]);
   const [editId, setEditId] = useState(null);
 
   const [formFields, setFormFields] = useState({
-    name: "",
-    description: "",
-    brand: "",
-    price: 10,
-    countInStock: 1,
-    ifFeatured: "",
-    subCategory: "",
-    category: "",
+    productId: "",
+    itemWeight: "",
+    itemForm: "",
+    manufacturer: "",
+    netQuantity: "",
+    modelNumber: "",
+    countryOfOrigin: "",
+    productDimensions: "",
+    asin: "",
+    specificUses: "",
+    itemHeight: "",
+    itemWidth: "",
   });
   const [opens, setOpens] = useState(false);
 
@@ -55,20 +42,15 @@ const Product = () => {
     setOpens(false);
   };
 
-  useEffect(() => {
-    fetchDataFromApi("/api/v1/get-category").then((result) => {
-      setCatData(result);
-    });
-  }, []);
-
-  // Handle category selection
-  const handleChangeCategory = (e) => {
-    setShowsetCatBy(e.target.value);
-  };
+  // useEffect(() => {
+  //   fetchDataFromApi("/api/v1/get-category").then((result) => {
+  //     setCatData(result);
+  //   });
+  // }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    fetchDataFromApi("/api/v1/get-product").then((res) => {
+    fetchDataFromApi("/api/v1/get-info").then((res) => {
       if (res?.success && Array.isArray(res.products)) {
         setProductList(res.products);
       } else {
@@ -87,21 +69,35 @@ const Product = () => {
 
   const editCategory = async (id) => {
     setFormFields({
-      name: "",
-      description: "",
-      brand: "",
-      price: "",
-      countInStock: "",
+      productId: "",
+      itemWeight: "",
+      itemForm: "",
+      manufacturer: "",
+      netQuantity: "",
+      modelNumber: "",
+      countryOfOrigin: "",
+      productDimensions: "",
+      asin: "",
+      specificUses: "",
+      itemHeight: "",
+      itemWidth: "",
     });
     setOpens(true);
     setEditId(id);
     const selectedProduct = await fetchDataFromApi(`/api/v1/get/${id}`);
     setFormFields({
-      name: selectedProduct.product.name,
-      description: selectedProduct.product.description,
-      brand: selectedProduct.product.brand,
-      price: selectedProduct.product.price,
-      countInStock: selectedProduct.product.countInStock,
+      productId: selectedProduct.product.productId,
+      itemWeight: selectedProduct.product.itemWeight,
+      itemForm: selectedProduct.product.itemForm,
+      manufacturer: selectedProduct.product.manufacturer,
+      netQuantity: selectedProduct.product.netQuantity,
+      modelNumber: selectedProduct.product.modelNumber,
+      countryOfOrigin: selectedProduct.product.countryOfOrigin,
+      productDimensions: selectedProduct.product.productDimensions,
+      asin: selectedProduct.product.asin,
+      specificUses: selectedProduct.product.specificUses,
+      itemHeight: selectedProduct.product.itemHeight,
+      itemWidth: selectedProduct.product.itemWidth,
     });
     setOpens(true);
   };
@@ -161,76 +157,57 @@ const Product = () => {
               </thead>
 
               <tbody>
-                {productList?.products?.length !== 0 ? (
-                  productList?.products?.map((item, index) => (
-                    <tr key={item._id || index}>
-                      <td>{index + 1}</td>
-                      <td>
-                        <div className="d-flex align-items-center productBox">
-                          <div className="imgWrapper">
-                            <div className="img">
-                              <img
-                                src={item.images?.[0]?.url}
-                                className="w-100"
-                                alt={item.name}
-                              />
-                            </div>
-                          </div>
-                          <div className="info pl-0">
-                            <h6>{item.name}</h6>
-                            <p>{item.description?.split("\n")[0]}</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>{item.category?.name || "N/A"}</td>
-                      <td>{item.brand || "Unknown"}</td>
-                      <td>
-                        <div>
-                          {item.oldPrice && (
-                            <del className="old">₹{item.oldPrice}</del>
-                          )}
-                          <span className="new text-danger">
-                            ₹ {item.price}
-                          </span>
-                        </div>
-                      </td>
-                      <td>{item.countInStock}</td>
-                      <td>
-                        {item.rating} ({Math.floor(Math.random() * 50)})
-                      </td>
-                      <td>{Math.floor(Math.random() * 500)}</td>
-                      <td>{Math.floor(Math.random() * 50)}K</td>
-                      <td>
-                        <div className="actions d-flex align-items-center">
-                          <Button className="secondary" color="secondary">
-                            <Link to="/product/details">
-                              <LuEyeClosed />
-                            </Link>
-                          </Button>
-                          <Button
-                            className="success"
-                            color="success"
-                            onClick={() => editCategory(item._id)}
-                          >
-                            <GiPencil />
-                          </Button>
-                          <Button
-                            className="error"
-                            color="error"
-                            onClick={() => deleteProduct(item._id)}
-                          >
-                            <MdDelete />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="10">No products found</td>
-                  </tr>
-                )}
-              </tbody>
+  {productList.length > 0 ? (
+    productList
+      .filter((product) => product.productId) // Only show products with productId
+      .map((product, index) => (
+        <tr key={product._id || index}>
+          <td>{index + 1}</td>
+          <td>{product.productId}</td>
+          {/* Additional Info Fields */}
+          <td>{product.additionalInfo?.itemWeight || "N/A"}</td>
+          <td>{product.additionalInfo?.itemForm || "N/A"}</td>
+          <td>{product.additionalInfo?.manufacturer || "N/A"}</td>
+          <td>{product.additionalInfo?.netQuantity || "N/A"}</td>
+          <td>{product.additionalInfo?.modelNumber || "N/A"}</td>
+          <td>{product.additionalInfo?.countryOfOrigin || "N/A"}</td>
+          <td>{product.additionalInfo?.productDimensions || "N/A"}</td>
+          <td>{product.additionalInfo?.asin || "N/A"}</td>
+          <td>{product.additionalInfo?.specificUses || "N/A"}</td>
+          <td>{product.additionalInfo?.itemHeight || "N/A"}</td>
+          <td>{product.additionalInfo?.itemWidth || "N/A"}</td>
+          
+          <td>
+            <div className="actions d-flex align-items-center">
+              <Button className="secondary" color="secondary">
+                <Link to={`/product/details/${product._id}`}>
+                  <LuEyeClosed />
+                </Link>
+              </Button>
+              <Button
+                className="success"
+                color="success"
+                onClick={() => editCategory(product._id)}
+              >
+                <GiPencil />
+              </Button>
+              <Button
+                className="error"
+                color="error"
+                onClick={() => deleteProduct(product._id)}
+              >
+                <MdDelete />
+              </Button>
+            </div>
+          </td>
+        </tr>
+      ))
+  ) : (
+    <tr>
+      <td colSpan="16">No products found</td>
+    </tr>
+  )}
+</tbody>
             </table>
             <div className="d-flex tableFooter">
               <Pagination
