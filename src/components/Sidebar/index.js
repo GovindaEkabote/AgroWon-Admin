@@ -71,6 +71,12 @@ const Sidebar = () => {
                 <li>
                   <Link to="/product/upload">Product Upload</Link>
                 </li>
+                <li>
+                  <Link to="/product-info">Product Info</Link>
+                </li>
+                <li>
+                  <Link to="/product/upload/info">Product Info Upload</Link>
+                </li>
               </ul>
             </div>
           </li>
