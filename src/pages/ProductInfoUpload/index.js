@@ -47,7 +47,7 @@ const ProductUpload = () => {
         itemHeight: "",
       });
     });
-    navigate("/product");
+    navigate("/product/upload/info");
   };
 
   const navigate = useNavigate();

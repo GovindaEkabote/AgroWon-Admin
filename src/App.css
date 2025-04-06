@@ -107,6 +107,10 @@ body.dark header .logo {
     opacity: 0.5 !important;
 }
 
+.table-responsice {
+    overflow-x: scroll;
+}
+
 header button.rounded-circle {
     min-width: 40px !important;
     width: 40px !important;

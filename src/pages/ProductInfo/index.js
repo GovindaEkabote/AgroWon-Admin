@@ -1,546 +1,318 @@
-  import React, { useRef } from "react";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Link from "@mui/material/Link";
-import Slider from "react-slick";
-import img from "../../assets/images/Govinda.jpg";
-import img2 from "../../assets/images/srk.jpeg";
-import { GrProductHunt } from "react-icons/gr";
-import { BiSolidCategory } from "react-icons/bi";
-import { IoSettingsSharp } from "react-icons/io5";
-import { IoIosColorPalette } from "react-icons/io";
-import { MdPhotoSizeSelectActual } from "react-icons/md";
-import { RiMoneyRupeeCircleFill } from "react-icons/ri";
-import { RiStockLine } from "react-icons/ri";
-import { BsStars } from "react-icons/bs";
-import { BsFillCalendarDateFill } from "react-icons/bs";
-import profile from "../../assets/images/Govinda.jpg";
-import UserAvatarImage from "../../components/userAvatarImage";
-import Rating from "@mui/material/Rating";
+import React, { useEffect, useState } from "react";
+import DashboardBox from "../Dashboard/components/DashboardBox";
+import { FaRegUser } from "react-icons/fa";
+import { TiShoppingCart } from "react-icons/ti";
+import { FaBagShopping } from "react-icons/fa6";
+import { WiStars } from "react-icons/wi";
 import { Button } from "@mui/material";
-import { FaReply } from "react-icons/fa";
-const ProductDetails = () => {
+import { RxDotsVertical } from "react-icons/rx";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { FaRegClock } from "react-icons/fa";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import { LuEyeClosed } from "react-icons/lu";
+import { GiPencil } from "react-icons/gi";
+import { MdDelete } from "react-icons/md";
+import Pagination from "@mui/material/Pagination";
+import { Link } from "react-router";
+import {
+  deleteDataApi,
+  editDataFromApi,
+  fetchDataFromApi,
+} from "../../utils/api";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import TextField from "@mui/material/TextField";
 
-  const productSliderBig = useRef();
-  const productSliderSmall = useRef();
-  
-  var productsSliderOptions = {
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
+const ITEM_HEIGHT = 48;
+
+const Product = () => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [showBy, setShowBy] = useState("");
+  const [showsetCatBy, setShowsetCatBy] = useState(""); // Selected category
+  const [catData, setCatData] = useState({ categoryList: [] }); // Ensure correct structure
+  const [productList, setProductList] = useState([]);
+  const [editId, setEditId] = useState(null);
+
+  const [formFields, setFormFields] = useState({
+    name: "",
+    description: "",
+    brand: "",
+    price: 10,
+    countInStock: 1,
+    ifFeatured: "",
+    subCategory: "",
+    category: "",
+  });
+  const [opens, setOpens] = useState(false);
+
+  const handleClosed = () => {
+    setOpens(false);
   };
-  var productsSliderSmOptions = {
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    arrows: true,
+
+  useEffect(() => {
+    fetchDataFromApi("/api/v1/get-category").then((result) => {
+      setCatData(result);
+    });
+  }, []);
+
+  // Handle category selection
+  const handleChangeCategory = (e) => {
+    setShowsetCatBy(e.target.value);
   };
-  
-    const gotoSlide = (index) => {
-        productSliderBig.current.slickGoTo(index);
-        productSliderSmall.current.slickGoTo(index);
-    };
-  
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    fetchDataFromApi("/api/v1/get-product").then((res) => {
+      if (res?.success && Array.isArray(res.products)) {
+        setProductList(res.products);
+      } else {
+        console.error("Invalid API response:", res);
+      }
+    });
+  }, []);
+
+  const deleteProduct = (id) => {
+    deleteDataApi(`/api/v1/delete-product/${id}`).then((res) => {
+      fetchDataFromApi("/api/v1/get-product").then((res) => {
+        setProductList(res);
+      });
+    });
+  };
+
+  const editCategory = async (id) => {
+    setFormFields({
+      name: "",
+      description: "",
+      brand: "",
+      price: "",
+      countInStock: "",
+    });
+    setOpens(true);
+    setEditId(id);
+    const selectedProduct = await fetchDataFromApi(`/api/v1/get/${id}`);
+    setFormFields({
+      name: selectedProduct.product.name,
+      description: selectedProduct.product.description,
+      brand: selectedProduct.product.brand,
+      price: selectedProduct.product.price,
+      countInStock: selectedProduct.product.countInStock,
+    });
+    setOpens(true);
+  };
+
+  const categoryEditSubmit = (id) => {
+    // e.preventDefault();
+    editDataFromApi(`/api/v1/update/${editId}`, formFields).then((result) => {
+      fetchDataFromApi("/api/v1/get-product").then((res) => {
+        setProductList((prevList) =>
+          prevList.filter((product) => product._id !== id)
+        );
+      });
+    });
+  };
+
+  const handleChange = (event, value) => {
+    fetchDataFromApi(`/api/v1/get-product?page=${value}`).then((result) => {
+      setProductList(result);
+    });
+  };
+
+  const changeInput = (e) => {
+    setFormFields(() => ({ ...formFields, [e.target.name]: e.target.value }));
+  };
+
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <>
       <div className="right-content w-100">
-        <div className="card shadow border-0 w-100 flex-row p-4">
-          <h5 className="mb-0">Product View</h5>
-          <Breadcrumbs aria-label="breadcrumb" className="ml-auto breadcrumbs_">
-            <Link underline="hover" color="inherit" href="/">
-              Home
-            </Link>
-            <Link underline="hover" color="inherit" href="/product">
-              Product
-            </Link>
-            <Link underline="hover" color="inherit" href="/product/details">
-              Product Info
-            </Link>
-          </Breadcrumbs>
-        </div>
+        <div className="card shadow border-0 p-3 mt-4">
+          <h3 className="hd">Best Selling Products</h3>
+          <div className="table-responsice mt-3">
+            <table className="table table-bordered v-align">
+              <thead className="thead-dark">
+                <tr>
+                  <th>UID</th>
+                  <th style={{ width: "150px" }}>productId</th>
+                  <th>itemWeight</th>
+                  <th>itemForm</th>
+                  <th>manufacturer</th>
+                  <th>netQuantity</th>
+                  <th>modelNumber</th>
+                  <th>countryOfOrigin</th>
+                  <th>Dimensions</th>
+                  <th>asin</th>
+                  <th>specificUses</th>
+                  <th>itemHeight</th>
+                  <th>itemWidth</th>
+                </tr>
+              </thead>
 
-        <div className="card productDetailsSection">
-          <div className="row">
-            <div className="col-md-5">
-              <div className="sliderWrapper pt-3 pb-3 pl-4 pr-4">
-                <h6 className="mb-4">Product Images</h6>
-                <Slider {...productsSliderOptions} ref={productSliderBig} className="sliderBig mb-2">
-                  <div className="item">
-                    <img src={img} alt="" className="w-100" />
-                  </div>
-                   <div className="item">
-                    <img src={img} alt="" className="w-100" />
-                  </div>
-                  <div className="item">
-                    <img src={img} alt="" className="w-100" />
-                  </div>
-                  <div className="item">
-                    <img src={img} alt="" className="w-100" />
-                  </div>
-                  <div className="item">
-                    <img src={img} alt="" className="w-100" />
-                  </div>
-                  <div className="item">
-                    <img src={img} alt="" className="w-100" />
-                  </div>
-                  <div className="item">
-                    <img src={img} alt="" className="w-100" />
-                  </div>
-                </Slider>
-                <Slider {...productsSliderSmOptions} ref={productSliderSmall} className="sliderSmall">
-                  <div className="item" onClick={() => gotoSlide(0)}>
-                    <img src={img} alt="" className="w-100" />
-                  </div>
-                  <div className="item" onClick={() => gotoSlide(1)}>
-                    <img src={img} alt="" className="w-100" />
-                  </div>
-                  <div className="item" onClick={() => gotoSlide(2)}>
-                    <img src={img} alt="" className="w-100" />
-                  </div>
-                  <div className="item" onClick={() => gotoSlide(3)}>
-                    <img src={img} alt="" className="w-100" />
-                  </div>
-                  <div className="item" onClick={() => gotoSlide(4)}>
-                    <img src={img} alt="" className="w-100" />
-                  </div>
-                  <div className="item" onClick={() => gotoSlide(5)}>
-                    <img src={img} alt="" className="w-100" />
-                  </div>
-                  <div className="item" onClick={() => gotoSlide(6)}>
-                    <img src={img} alt="" className="w-100" />
-                  </div>
-                  <div className="item" onClick={() => gotoSlide(7)}>
-                    <img src={img2} alt="" className="w-100" />
-                  </div>
-                </Slider>
-              </div>
-            </div>
-
-            <div className="col-md-7">
-              <div className="sliderWrapper pt-3 pb-3 pl-4 pr-4">
-                <h6 className="mb-4">Product Details</h6>
-                <h4>
-                  TrustBasket Vermicompost 5kg 100% Natural Organic Fertilizer
-                  for Plants
-                </h4>
-                <div className="productInfo mt-4">
-                  <div className="row mb-3">
-                    <div className="col-sm-3 d-flex align-items-center">
-                      <span className="icon">
-                        <GrProductHunt />
-                      </span>
-                      <span className="name">Brand</span>
-                    </div>
-                    <div className="col-sm-9">
-                      <span>TrustBasket</span>
-                    </div>
-                  </div>
-                  <div className="row mb-3">
-                    <div className="col-sm-3 d-flex align-items-center">
-                      <span className="icon">
-                        <BiSolidCategory />
-                      </span>
-                      <span className="name">Category</span>
-                    </div>
-                    <div className="col-sm-9">
-                      <span>Fertilizer</span>
-                    </div>
-                  </div>
-                  <div className="row mb-3">
-                    <div className="col-sm-3 d-flex align-items-center">
-                      <span className="icon">
-                        <IoSettingsSharp />
-                      </span>
-                      <span className="name">Tags</span>
-                    </div>
-                    <div className="col-sm-9">
-                      <span>
-                        <ul className="list list-inline tags sml">
-                          <li className="list-inline-item">
-                            <span>Organic</span>
-                          </li>
-                          <li className="list-inline-item">
-                            <span>NonOrganic</span>
-                          </li>
-                          <li className="list-inline-item">
-                            <span>Organic</span>
-                          </li>
-                          <li className="list-inline-item">
-                            <span>NonOrganic</span>
-                          </li>
-                          <li className="list-inline-item">
-                            <span>Organic</span>
-                          </li>
-                          <li className="list-inline-item">
-                            <span>NonOrganic</span>
-                          </li>
-                        </ul>
-                      </span>
-                    </div>
-                  </div>
-                  <div className="row mb-3">
-                    <div className="col-sm-3 d-flex align-items-center">
-                      <span className="icon">
-                        <IoIosColorPalette />
-                      </span>
-                      <span className="name">Color</span>
-                    </div>
-                    <div className="col-sm-9">
-                      <span>
-                        <ul className="list list-inline tags sml">
-                          <li className="list-inline-item">
-                            <span>RED</span>
-                          </li>
-                          <li className="list-inline-item">
-                            <span>YELLOW</span>
-                          </li>
-                          <li className="list-inline-item">
-                            <span>PINK</span>
-                          </li>
-                          <li className="list-inline-item">
-                            <span>ORANGE</span>
-                          </li>
-                          <li className="list-inline-item">
-                            <span>BLACK</span>
-                          </li>
-                          <li className="list-inline-item">
-                            <span>WHITE</span>
-                          </li>
-                        </ul>
-                      </span>
-                    </div>
-                  </div>
-                  <div className="row mb-3">
-                    <div className="col-sm-3 d-flex align-items-center">
-                      <span className="icon">
-                        <MdPhotoSizeSelectActual />
-                      </span>
-                      <span className="name">Size</span>
-                    </div>
-                    <div className="col-sm-9">
-                      <span>
-                        <ul className="list list-inline tags sml">
-                          <li className="list-inline-item">
-                            <span>5KG</span>
-                          </li>
-                          <li className="list-inline-item">
-                            <span>10KG</span>
-                          </li>
-                          <li className="list-inline-item">
-                            <span>15KG</span>
-                          </li>
-                          <li className="list-inline-item">
-                            <span>20KG</span>
-                          </li>
-                          <li className="list-inline-item">
-                            <span>25KG</span>
-                          </li>
-                        </ul>
-                      </span>
-                    </div>
-                  </div>
-                  <div className="row mb-3">
-                    <div className="col-sm-3 d-flex align-items-center">
-                      <span className="icon">
-                        <RiMoneyRupeeCircleFill />
-                      </span>
-                      <span className="name">Price</span>
-                    </div>
-                    <div className="col-sm-9">
-                      <span className="del">100</span>
-                      <span>100</span>
-                    </div>
-                  </div>
-                  <div className="row mb-3">
-                    <div className="col-sm-3 d-flex align-items-center">
-                      <span className="icon">
-                        <RiStockLine />
-                      </span>
-                      <span className="name">Stock</span>
-                    </div>
-                    <div className="col-sm-9">
-                      <span>Fertilizer</span>
-                    </div>
-                  </div>
-                  <div className="row mb-3">
-                    <div className="col-sm-3 d-flex align-items-center">
-                      <span className="icon">
-                        <BsStars />
-                      </span>
-                      <span className="name">Review</span>
-                    </div>
-                    <div className="col-sm-9">
-                      <span>Fertilizer</span>
-                    </div>
-                  </div>
-                  <div className="row mb-3">
-                    <div className="col-sm-3 d-flex align-items-center">
-                      <span className="icon">
-                        <BsFillCalendarDateFill />
-                      </span>
-                      <span className="name">Published</span>
-                    </div>
-                    <div className="col-sm-9">
-                      <span>Fertilizer</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="p-4">
-            <h4 className="mt-4 mb-3">Product Description</h4>
-            <p>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum.
-            </p>
-            <br />
-            <h4 className="mt-4 mb-4">Reating </h4>
-            <div className="ratingSection">
-              <div className="ratingrow d-flex align-items-center">
-                <span className="col1">5 star</span>
-                <div className="col2">
-                  <div class="progress">
-                    <div
-                      className="progress-bar"
-                      style={{ width: "70%" }}
-                    ></div>
-                  </div>
-                </div>
-                <span className="col3">(22)</span>
-              </div>
-              <div className="ratingrow d-flex align-items-center">
-                <span className="col1">4 star</span>
-                <div className="col2">
-                  <div class="progress">
-                    <div
-                      className="progress-bar"
-                      style={{ width: "58%" }}
-                    ></div>
-                  </div>
-                </div>
-                <span className="col3">(282)</span>
-              </div>
-              <div className="ratingrow d-flex align-items-center">
-                <span className="col1">3 star</span>
-                <div className="col2">
-                  <div class="progress">
-                    <div
-                      className="progress-bar"
-                      style={{ width: "35%" }}
-                    ></div>
-                  </div>
-                </div>
-                <span className="col3">(782)</span>
-              </div>
-              <div className="ratingrow d-flex align-items-center">
-                <span className="col1">2 star</span>
-                <div className="col2">
-                  <div class="progress">
-                    <div
-                      className="progress-bar"
-                      style={{ width: "40%" }}
-                    ></div>
-                  </div>
-                </div>
-                <span className="col3">(242)</span>
-              </div>
-              <div className="ratingrow d-flex align-items-center">
-                <span className="col1">1 star</span>
-                <div className="col2">
-                  <div class="progress">
-                    <div
-                      className="progress-bar"
-                      style={{ width: "10%" }}
-                    ></div>
-                  </div>
-                </div>
-                <span className="col3">(122)</span>
-              </div>
-            </div>
-
-            <br />
-            <h4 className="mt-4 mb-4">Customer Reviews</h4>
-            <div className="reviewsSection">
-              <div className="reviewsRow">
-                <div className="row">
-                  <div className="col-sm-7 d-flex">
-                    <div className="d-flex aligh-items-center flex-colume">
-                      <div className="userInfo d-flex align-items-center mb-3">
-                        <UserAvatarImage img={profile} lg={true} />
-                        <div className="info pl-3">
-                          <h6>Govinda Ekbote</h6>
-                          {/* <span>25 minutes ago</span> */}
-                          <Rating
-                            name="read-only"
-                            className="ratings"
-                            value={4.5}
-                            precision={0.5}
-                            readOnly
-                          />
+              <tbody>
+                {productList?.products?.length !== 0 ? (
+                  productList?.products?.map((item, index) => (
+                    <tr key={item._id || index}>
+                      <td>{index + 1}</td>
+                      <td>
+                        <div className="d-flex align-items-center productBox">
+                          <div className="imgWrapper">
+                            <div className="img">
+                              <img
+                                src={item.images?.[0]?.url}
+                                className="w-100"
+                                alt={item.name}
+                              />
+                            </div>
+                          </div>
+                          <div className="info pl-0">
+                            <h6>{item.name}</h6>
+                            <p>{item.description?.split("\n")[0]}</p>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-md-5 d-flex aligh-items-center">
-                    <div className="ml-auto">
-                      <Button className="btn-blue btn-lg  btn-big ">
-                        <FaReply />
-                        &nbsp;Reply
-                      </Button>
-                    </div>
-                  </div>
-                  <p className="mt-3">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a
-                    type specimen book.
-                  </p>
-                </div>
-              </div>
-
-              <div className="reviewsRow reply">
-                <div className="row">
-                  <div className="col-sm-7 d-flex">
-                    <div className="d-flex aligh-items-center flex-colume">
-                      <div className="userInfo d-flex align-items-center mb-3">
-                        <UserAvatarImage img={profile} lg={true} />
-                        <div className="info pl-3">
-                          <h6>Govinda Ekbote</h6>
-                          {/* <span>25 minutes ago</span> */}
-                          <Rating
-                            name="read-only"
-                            className="ratings"
-                            value={4.5}
-                            precision={0.5}
-                            readOnly
-                          />
+                      </td>
+                      <td>{item.category?.name || "N/A"}</td>
+                      <td>{item.brand || "Unknown"}</td>
+                      <td>
+                        <div>
+                          {item.oldPrice && (
+                            <del className="old">₹{item.oldPrice}</del>
+                          )}
+                          <span className="new text-danger">
+                            ₹ {item.price}
+                          </span>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-md-5 d-flex aligh-items-center">
-                    <div className="ml-auto">
-                      <Button className="btn-blue btn-lg  btn-big ">
-                        <FaReply />
-                        &nbsp;Reply
-                      </Button>
-                    </div>
-                  </div>
-                  <p className="mt-3">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a
-                    type specimen book.
-                  </p>
-                </div>
-              </div>
-              <div className="reviewsRow reply">
-                <div className="row">
-                  <div className="col-sm-7 d-flex">
-                    <div className="d-flex aligh-items-center flex-colume">
-                      <div className="userInfo d-flex align-items-center mb-3">
-                        <UserAvatarImage img={profile} lg={true} />
-                        <div className="info pl-3">
-                          <h6>Govinda Ekbote</h6>
-                          {/* <span>25 minutes ago</span> */}
-                          <Rating
-                            name="read-only"
-                            className="ratings"
-                            value={4.5}
-                            precision={0.5}
-                            readOnly
-                          />
+                      </td>
+                      <td>{item.countInStock}</td>
+                      <td>
+                        {item.rating} ({Math.floor(Math.random() * 50)})
+                      </td>
+                      <td>{Math.floor(Math.random() * 500)}</td>
+                      <td>{Math.floor(Math.random() * 50)}K</td>
+                      <td>
+                        <div className="actions d-flex align-items-center">
+                          <Button className="secondary" color="secondary">
+                            <Link to="/product/details">
+                              <LuEyeClosed />
+                            </Link>
+                          </Button>
+                          <Button
+                            className="success"
+                            color="success"
+                            onClick={() => editCategory(item._id)}
+                          >
+                            <GiPencil />
+                          </Button>
+                          <Button
+                            className="error"
+                            color="error"
+                            onClick={() => deleteProduct(item._id)}
+                          >
+                            <MdDelete />
+                          </Button>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-md-5 d-flex aligh-items-center">
-                    <div className="ml-auto">
-                      <Button className="btn-blue btn-lg  btn-big ">
-                        <FaReply />
-                        &nbsp;Reply
-                      </Button>
-                    </div>
-                  </div>
-                  <p className="mt-3">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a
-                    type specimen book.
-                  </p>
-                </div>
-              </div>
-
-              <div className="reviewsRow">
-                <div className="row">
-                  <div className="col-sm-7 d-flex">
-                    <div className="d-flex aligh-items-center flex-colume">
-                      <div className="userInfo d-flex align-items-center mb-3">
-                        <UserAvatarImage img={profile} lg={true} />
-                        <div className="info pl-3">
-                          <h6>Govinda Ekbote</h6>
-                          {/* <span>25 minutes ago</span> */}
-                          <Rating
-                            name="read-only"
-                            className="ratings"
-                            value={4.5}
-                            precision={0.5}
-                            readOnly
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-md-5 d-flex aligh-items-center">
-                    <div className="ml-auto">
-                      <Button className="btn-blue btn-lg  btn-big ">
-                        <FaReply />
-                        &nbsp;Reply
-                      </Button>
-                    </div>
-                  </div>
-                  <p className="mt-3">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a
-                    type specimen book.
-                  </p>
-                </div>
-              </div>
-
-              <br/>
-              <h4 className="mt-4 mb-4">Reply Reviews</h4>
-                <form className="reviewForm mb-4">
-                  <textarea  placeholder="Reply here.."/>
-                </form>
-                <Button className="w-100 btn-blue btn-big btn-lg">Drop Your Reply</Button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="10">No products found</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+            <div className="d-flex tableFooter">
+              <Pagination
+                count={productList?.totalPages}
+                color="primary"
+                className="pagination"
+                showFirstButton
+                showLastButton
+                onChange={handleChange}
+              />
             </div>
           </div>
         </div>
       </div>
+
+      <Dialog open={opens} onClose={handleClosed}>
+        <form onSubmit={categoryEditSubmit}>
+          <DialogContent>
+            <DialogContentText>Edit Product</DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              name="name"
+              label="Product Name"
+              type="text"
+              fullWidth
+              value={formFields.name || ""}
+              onChange={changeInput}
+            />
+
+            <TextField
+              margin="dense"
+              name="description"
+              label="Description"
+              type="text"
+              fullWidth
+              value={formFields.description || ""}
+              onChange={changeInput}
+            />
+
+            <TextField
+              margin="dense"
+              name="brand"
+              label="Brand"
+              type="text"
+              fullWidth
+              value={formFields.brand || ""}
+              onChange={changeInput}
+            />
+
+            <TextField
+              margin="dense"
+              name="price"
+              label="Price"
+              type="number"
+              fullWidth
+              value={formFields.price || ""}
+              onChange={changeInput}
+            />
+
+            <TextField
+              margin="dense"
+              name="countInStock"
+              label="Stock"
+              type="number"
+              fullWidth
+              value={formFields.countInStock || ""}
+              onChange={changeInput}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClosed} color="secondary">
+              Cancel
+            </Button>
+            <Button type="submit" color="primary" onClick={handleClosed}>
+              Save
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
     </>
   );
 };
 
-export default ProductDetails;
+export default Product;
