@@ -48,6 +48,17 @@ const Product = () => {
     ifFeatured: "",
     subCategory: "",
     category: "",
+    itemWeight: "",
+    itemForm: "",
+    manufacturer: "",
+    netQuantity: "",
+    modelNumber: "",
+    countryOfOrigin: "",
+    productDimensions: "",
+    asin: "",
+    specificUses: "",
+    itemHeight: "",
+    itemWidth: "",
   });
   const [opens, setOpens] = useState(false);
 
@@ -102,6 +113,17 @@ const Product = () => {
       brand: selectedProduct.product.brand,
       price: selectedProduct.product.price,
       countInStock: selectedProduct.product.countInStock,
+      itemWeight: selectedProduct.product.itemWeight || "",
+      itemForm: selectedProduct.product.itemForm || "",
+      manufacturer: selectedProduct.product.manufacturer || "",
+      netQuantity: selectedProduct.product.netQuantity || "",
+      modelNumber: selectedProduct.product.modelNumber || "",
+      countryOfOrigin: selectedProduct.product.countryOfOrigin || "",
+      productDimensions: selectedProduct.product.productDimensions || "",
+      asin: selectedProduct.product.asin || "",
+      specificUses: selectedProduct.product.specificUses || "",
+      itemHeight: selectedProduct.product.itemHeight || "",
+      itemWidth: selectedProduct.product.itemWidth || "",
     });
     setOpens(true);
   };
@@ -291,6 +313,17 @@ const Product = () => {
                   <th>RATING</th>
                   <th>ORDERS</th>
                   <th>SALES</th>
+                  <th>itemWeight</th>
+                  <th>itemForm</th>
+                  <th>manufacturer</th>
+                  <th>netQuantity</th>
+                  <th>modelNumber</th>
+                  <th>countryOfOrigin</th>
+                  <th>Dimensions</th>
+                  <th>asin</th>
+                  <th>specificUses</th>
+                  <th>itemHeight</th>
+                  <th>itemWidth</th>
                   <th>ACTION</th>
                 </tr>
               </thead>
@@ -335,6 +368,23 @@ const Product = () => {
                       </td>
                       <td>{Math.floor(Math.random() * 500)}</td>
                       <td>{Math.floor(Math.random() * 50)}K</td>
+
+                        {/* Additional Info Fields */}
+                        <td>{item.itemWeight || "N/A"}</td>
+                        <td>{item.itemForm || "N/A"}</td>
+                        <td>{item.manufacturer || "N/A"}</td>
+                        <td>{item.netQuantity || "N/A"}</td>
+                        <td>{item.modelNumber || "N/A"}</td>
+                        <td>
+                          {item.countryOfOrigin || "N/A"}
+                        </td>
+                        <td>
+                          {item.itemDimensions || "N/A"}
+                        </td>
+                        <td>{item.asin || "N/A"}</td>
+                        <td>{item.specificUses || "N/A"}</td>
+                        <td>{item.itemHeight || "N/A"}</td>
+                        <td>{item.itemWidth || "N/A"}</td>
                       <td>
                         <div className="actions d-flex align-items-center">
                           <Button className="secondary" color="secondary">
