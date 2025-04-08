@@ -68,50 +68,61 @@ const Product = () => {
   };
 
   const editCategory = async (id) => {
-    setFormFields({
-      productId: "",
-      itemWeight: "",
-      itemForm: "",
-      manufacturer: "",
-      netQuantity: "",
-      modelNumber: "",
-      countryOfOrigin: "",
-      productDimensions: "",
-      asin: "",
-      specificUses: "",
-      itemHeight: "",
-      itemWidth: "",
-    });
-    setOpens(true);
-    setEditId(id);
-    const selectedProduct = await fetchDataFromApi(`/api/v1/get/${id}`);
-    setFormFields({
-      productId: selectedProduct.product.productId,
-      itemWeight: selectedProduct.product.itemWeight,
-      itemForm: selectedProduct.product.itemForm,
-      manufacturer: selectedProduct.product.manufacturer,
-      netQuantity: selectedProduct.product.netQuantity,
-      modelNumber: selectedProduct.product.modelNumber,
-      countryOfOrigin: selectedProduct.product.countryOfOrigin,
-      productDimensions: selectedProduct.product.productDimensions,
-      asin: selectedProduct.product.asin,
-      specificUses: selectedProduct.product.specificUses,
-      itemHeight: selectedProduct.product.itemHeight,
-      itemWidth: selectedProduct.product.itemWidth,
-    });
-    setOpens(true);
-  };
-
-  const categoryEditSubmit = (id) => {
-    // e.preventDefault();
-    editDataFromApi(`/api/v1/update/${editId}`, formFields).then((result) => {
-      fetchDataFromApi("/api/v1/get-product").then((res) => {
-        setProductList((prevList) =>
-          prevList.filter((product) => product._id !== id)
-        );
+    try {
+      setFormFields({
+        productId: "",
+        itemWeight: "",
+        itemForm: "",
+        manufacturer: "",
+        netQuantity: "",
+        modelNumber: "",
+        countryOfOrigin: "",
+        productDimensions: "",
+        asin: "",
+        specificUses: "",
+        itemHeight: "",
+        itemWidth: "",
       });
-    });
+      const productData = await fetchDataFromApi(`/api/v1/get-info/${id}`);  
+      alert(productData)
+      // Set form fields with product data
+      setFormFields({
+        productId: productData.product.productId || productData._id,
+        itemWeight: productData.product.additionalInfo?.itemWeight || "",
+        itemForm: productData.product.additionalInfo?.itemForm || "",
+        manufacturer: productData.product.additionalInfo?.manufacturer || "",
+        netQuantity: productData.product.additionalInfo?.netQuantity || "",
+        modelNumber: productData.product.additionalInfo?.modelNumber || "",
+        countryOfOrigin: productData.product.additionalInfo?.countryOfOrigin || "",
+        productDimensions: productData.product.additionalInfo?.productDimensions || "",
+        asin: productData.product.additionalInfo?.asin || "",
+        specificUses: productData.product.additionalInfo?.specificUses || "",
+        itemHeight: productData.product.additionalInfo?.itemHeight || "",
+        itemWidth: productData.product.additionalInfo?.itemWidth || "",
+      });
+  
+      setEditId(id);
+      setOpens(true);
+    } catch (error) {
+      console.error("Error in editCategory:", error);
+    }
   };
+  
+  const categoryEditSubmit = async (e) => {
+    e.preventDefault(); // <-- Prevents form submission from reloading page
+  
+    try {
+      const result = await editDataFromApi(`/api/v1/update-info/${editId}`, formFields);
+      if (result?.updateInfo) {
+        const updatedList = await fetchDataFromApi("/api/v1/get-info");
+        setProductList(updatedList?.products || []);
+        setOpens(false); // close dialog on success
+      }
+    } catch (err) {
+      console.error("Failed to update product info:", err);
+    }
+  };
+  
 
   const handleChange = (event, value) => {
     fetchDataFromApi(`/api/v1/get-product?page=${value}`).then((result) => {
@@ -157,57 +168,61 @@ const Product = () => {
               </thead>
 
               <tbody>
-  {productList.length > 0 ? (
-    productList
-      .filter((product) => product.productId) // Only show products with productId
-      .map((product, index) => (
-        <tr key={product._id || index}>
-          <td>{index + 1}</td>
-          <td>{product.productId}</td>
-          {/* Additional Info Fields */}
-          <td>{product.additionalInfo?.itemWeight || "N/A"}</td>
-          <td>{product.additionalInfo?.itemForm || "N/A"}</td>
-          <td>{product.additionalInfo?.manufacturer || "N/A"}</td>
-          <td>{product.additionalInfo?.netQuantity || "N/A"}</td>
-          <td>{product.additionalInfo?.modelNumber || "N/A"}</td>
-          <td>{product.additionalInfo?.countryOfOrigin || "N/A"}</td>
-          <td>{product.additionalInfo?.productDimensions || "N/A"}</td>
-          <td>{product.additionalInfo?.asin || "N/A"}</td>
-          <td>{product.additionalInfo?.specificUses || "N/A"}</td>
-          <td>{product.additionalInfo?.itemHeight || "N/A"}</td>
-          <td>{product.additionalInfo?.itemWidth || "N/A"}</td>
-          
-          <td>
-            <div className="actions d-flex align-items-center">
-              <Button className="secondary" color="secondary">
-                <Link to={`/product/details/${product._id}`}>
-                  <LuEyeClosed />
-                </Link>
-              </Button>
-              <Button
-                className="success"
-                color="success"
-                onClick={() => editCategory(product._id)}
-              >
-                <GiPencil />
-              </Button>
-              <Button
-                className="error"
-                color="error"
-                onClick={() => deleteProduct(product._id)}
-              >
-                <MdDelete />
-              </Button>
-            </div>
-          </td>
-        </tr>
-      ))
-  ) : (
-    <tr>
-      <td colSpan="16">No products found</td>
-    </tr>
-  )}
-</tbody>
+                {productList.length > 0 ? (
+                  productList
+                    .filter((product) => product.productId) // Only show products with productId
+                    .map((product, index) => (
+                      <tr key={product._id || index}>
+                        <td>{index + 1}</td>
+                        <td>{product.productId}</td>
+                        {/* Additional Info Fields */}
+                        <td>{product.additionalInfo?.itemWeight || "N/A"}</td>
+                        <td>{product.additionalInfo?.itemForm || "N/A"}</td>
+                        <td>{product.additionalInfo?.manufacturer || "N/A"}</td>
+                        <td>{product.additionalInfo?.netQuantity || "N/A"}</td>
+                        <td>{product.additionalInfo?.modelNumber || "N/A"}</td>
+                        <td>
+                          {product.additionalInfo?.countryOfOrigin || "N/A"}
+                        </td>
+                        <td>
+                          {product.additionalInfo?.productDimensions || "N/A"}
+                        </td>
+                        <td>{product.additionalInfo?.asin || "N/A"}</td>
+                        <td>{product.additionalInfo?.specificUses || "N/A"}</td>
+                        <td>{product.additionalInfo?.itemHeight || "N/A"}</td>
+                        <td>{product.additionalInfo?.itemWidth || "N/A"}</td>
+
+                        <td>
+                          <div className="actions d-flex align-items-center">
+                            <Button className="secondary" color="secondary">
+                              <Link to={`/product/details/${product._id}`}>
+                                <LuEyeClosed />
+                              </Link>
+                            </Button>
+                            <Button
+                              className="success"
+                              color="success"
+                              onClick={() => editCategory(product._id)}
+                            >
+                              <GiPencil />
+                            </Button>
+                            <Button
+                              className="error"
+                              color="error"
+                              onClick={() => deleteProduct(product._id)}
+                            >
+                              <MdDelete />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                ) : (
+                  <tr>
+                    <td colSpan="16">No products found</td>
+                  </tr>
+                )}
+              </tbody>
             </table>
             <div className="d-flex tableFooter">
               <Pagination
@@ -224,70 +239,65 @@ const Product = () => {
       </div>
 
       <Dialog open={opens} onClose={handleClosed}>
-        <form onSubmit={categoryEditSubmit}>
-          <DialogContent>
-            <DialogContentText>Edit Product</DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              name="name"
-              label="Product Name"
-              type="text"
-              fullWidth
-              value={formFields.name || ""}
-              onChange={changeInput}
-            />
-
-            <TextField
-              margin="dense"
-              name="description"
-              label="Description"
-              type="text"
-              fullWidth
-              value={formFields.description || ""}
-              onChange={changeInput}
-            />
-
-            <TextField
-              margin="dense"
-              name="brand"
-              label="Brand"
-              type="text"
-              fullWidth
-              value={formFields.brand || ""}
-              onChange={changeInput}
-            />
-
-            <TextField
-              margin="dense"
-              name="price"
-              label="Price"
-              type="number"
-              fullWidth
-              value={formFields.price || ""}
-              onChange={changeInput}
-            />
-
-            <TextField
-              margin="dense"
-              name="countInStock"
-              label="Stock"
-              type="number"
-              fullWidth
-              value={formFields.countInStock || ""}
-              onChange={changeInput}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClosed} color="secondary">
-              Cancel
-            </Button>
-            <Button type="submit" color="primary" onClick={handleClosed}>
-              Save
-            </Button>
-          </DialogActions>
-        </form>
-      </Dialog>
+  <form onSubmit={categoryEditSubmit}>
+    <DialogContent>
+     
+          <TextField
+            margin="normal"
+            name="itemWeight"
+            label="Item Weight"
+            fullWidth
+            value={formFields.itemWeight}
+            onChange={changeInput}
+          />
+       
+          <TextField
+            margin="normal"
+            name="itemForm"
+            label="Item Form"
+            fullWidth
+            value={formFields.itemForm}
+            onChange={changeInput}
+          />
+       
+          <TextField
+            margin="normal"
+            name="manufacturer"
+            label="Manufacturer"
+            fullWidth
+            value={formFields.manufacturer}
+            onChange={changeInput}
+          />
+       
+          <TextField
+            margin="normal"
+            name="netQuantity"
+            label="Net Quantity"
+            fullWidth
+            value={formFields.netQuantity}
+            onChange={changeInput}
+          />
+       
+          <TextField
+            margin="normal"
+            name="modelNumber"
+            label="Model Number"
+            fullWidth
+            value={formFields.modelNumber}
+            onChange={changeInput}
+          />
+       
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={handleClosed} color="secondary">
+        Cancel
+      </Button>
+      <Button type="submit" color="primary" variant="contained">
+        Save Changes
+      </Button>
+    </DialogActions>
+  </form>
+</Dialog>
     </>
   );
 };
