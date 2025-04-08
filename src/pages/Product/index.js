@@ -350,7 +350,7 @@ const Product = () => {
                           </div>
                         </div>
                       </td>
-                      <td>{item.category?.name || "N/A"}</td>
+                      <td>{item.category?.name || "-"}</td>
                       <td>{item.brand || "Unknown"}</td>
                       <td>
                         <div>
@@ -370,21 +370,21 @@ const Product = () => {
                       <td>{Math.floor(Math.random() * 50)}K</td>
 
                         {/* Additional Info Fields */}
-                        <td>{item.itemWeight || "N/A"}</td>
-                        <td>{item.itemForm || "N/A"}</td>
-                        <td>{item.manufacturer || "N/A"}</td>
-                        <td>{item.netQuantity || "N/A"}</td>
-                        <td>{item.modelNumber || "N/A"}</td>
+                        <td>{item.itemWeight || "-"}</td>
+                        <td>{item.itemForm || "-"}</td>
+                        <td>{item.manufacturer || "-"}</td>
+                        <td>{item.netQuantity || "-"}</td>
+                        <td>{item.modelNumber || "-"}</td>
                         <td>
-                          {item.countryOfOrigin || "N/A"}
+                          {item.countryOfOrigin || "-"}
                         </td>
                         <td>
-                          {item.itemDimensions || "N/A"}
+                          {item.itemDimensions || "-"}
                         </td>
-                        <td>{item.asin || "N/A"}</td>
-                        <td>{item.specificUses || "N/A"}</td>
-                        <td>{item.itemHeight || "N/A"}</td>
-                        <td>{item.itemWidth || "N/A"}</td>
+                        <td>{item.asin || "-"}</td>
+                        <td>{item.specificUses || "-"}</td>
+                        <td>{item.itemHeight || "-"}</td>
+                        <td>{item.itemWidth || "-"}</td>
                       <td>
                         <div className="actions d-flex align-items-center">
                           <Button className="secondary" color="secondary">
