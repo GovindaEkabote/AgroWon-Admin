@@ -369,22 +369,18 @@ const Product = () => {
                       <td>{Math.floor(Math.random() * 500)}</td>
                       <td>{Math.floor(Math.random() * 50)}K</td>
 
-                        {/* Additional Info Fields */}
-                        <td>{item.itemWeight || "-"}</td>
-                        <td>{item.itemForm || "-"}</td>
-                        <td>{item.manufacturer || "-"}</td>
-                        <td>{item.netQuantity || "-"}</td>
-                        <td>{item.modelNumber || "-"}</td>
-                        <td>
-                          {item.countryOfOrigin || "-"}
-                        </td>
-                        <td>
-                          {item.itemDimensions || "-"}
-                        </td>
-                        <td>{item.asin || "-"}</td>
-                        <td>{item.specificUses || "-"}</td>
-                        <td>{item.itemHeight || "-"}</td>
-                        <td>{item.itemWidth || "-"}</td>
+                      {/* Additional Info Fields */}
+                      <td>{item.itemWeight || "-"}</td>
+                      <td>{item.itemForm || "-"}</td>
+                      <td>{item.manufacturer || "-"}</td>
+                      <td>{item.netQuantity || "-"}</td>
+                      <td>{item.modelNumber || "-"}</td>
+                      <td>{item.countryOfOrigin || "-"}</td>
+                      <td>{item.productDimensions || "-"}</td>
+                      <td>{item.asin || "-"}</td>
+                      <td>{item.specificUses || "-"}</td>
+                      <td>{item.itemHeight || "-"}</td>
+                      <td>{item.itemWidth || "-"}</td>
                       <td>
                         <div className="actions d-flex align-items-center">
                           <Button className="secondary" color="secondary">
