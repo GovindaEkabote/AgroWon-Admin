@@ -253,12 +253,12 @@ const Header = () => {
                   >
                     <div className="userImg">
                       <span className="rounded-circle">
-                        <img src={profile} alt="logo" />
+                        {context.user?.name.charAt(0)}
                       </span>
                     </div>
                     <div className="userInfo res-hide">
-                      <h4>Govinda Ekbote</h4>
-                      <p className="mb-0 ">@govind786</p>
+                      <h4>{context.user?.name}</h4>
+                      <p className="mb-0 ">{context.user?.email}</p>
                     </div>
                   </Button>
                   <Menu

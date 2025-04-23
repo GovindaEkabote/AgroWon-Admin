@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import logo from "../../assets/images/Logo.png";
 import { MyContext } from "../../App";
 import { MdEmail } from "react-icons/md";
@@ -8,14 +9,69 @@ import { FaEyeSlash } from "react-icons/fa";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
+import { postData } from "../../utils/api";
 
 const Login = () => {
+  const navigate = useNavigate();
   const context = useContext(MyContext);
   const [inputIndex, setInputIndex] = useState(null);
   const [isShowPassword, setIsShowPassword] = useState(false);
 
+  const [formfields, setFormfields] = useState({
+    email: "",
+    password: "",
+    isAdmin: true,
+  });
+
   const focusInput = (index) => {
     setInputIndex(index);
+  };
+
+  const onChangeInput = (e) => {
+    setFormfields(() => ({
+      ...formfields,
+      [e.target.name]: e.target.value,
+    }));
+  };
+  const signIn = (e) => {
+    e.preventDefault();
+
+    if (formfields.email === "") {
+      alert("Please Enter email");
+      return;
+    }
+    if (formfields.password === "") {
+      alert("Please Enter password");
+      return;
+    }
+
+    postData("/api/v1/signin", formfields)
+      .then((res) => {
+        try {
+          console.log("Response received:", res);
+          localStorage.setItem("token", res.token);
+          const user = {
+            name: res.existUser?.name,
+            email: res.existUser?.email,
+            userID:res.existUser._id
+          }
+          localStorage.setItem("user",JSON.stringify(user));
+          
+          context.setUser({
+            name: res.existUser?.name,
+            email: res.existUser?.email,
+            
+          });
+          alert("Login Successfully!");
+          window.location.href='/dashboard'
+        } catch (error) {
+          console.log("Error in try block:", error);
+        }
+      })
+      .catch((err) => {
+        console.log("API Error:", err);
+        alert("Something went wrong. Please try again.");
+      });
   };
 
   useEffect(() => {
@@ -31,7 +87,7 @@ const Login = () => {
           </div>
 
           <div className="wrapper mt-3 card border">
-            <form>
+            <form onSubmit={signIn}>
               <div
                 className={`form-group position-relative ${
                   inputIndex === 0 && "focus"
@@ -47,6 +103,8 @@ const Login = () => {
                   onFocus={() => focusInput(0)}
                   onBlur={() => setInputIndex(null)}
                   autoFocus
+                  name="email"
+                  onChange={onChangeInput}
                 />
               </div>
               <div
@@ -63,6 +121,8 @@ const Login = () => {
                   placeholder="Enter Your Password"
                   onFocus={() => focusInput(1)}
                   onBlur={() => setInputIndex(null)}
+                  name="password"
+                  onChange={onChangeInput}
                 />
                 <span
                   className="toggleShowPassword"
@@ -72,7 +132,7 @@ const Login = () => {
                 </span>
               </div>
               <div className="form-group">
-                <Button className="btn-blue btn-lg w-100 btn-big">
+                <Button type="submit" className="btn-blue btn-lg w-100 btn-big">
                   Sign In
                 </Button>
               </div>
