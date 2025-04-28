@@ -18,8 +18,10 @@ import { MyContext } from "../../App";
 import { AiOutlineMenuUnfold } from "react-icons/ai";
 import { AiOutlineMenuFold } from "react-icons/ai";
 import UserAvatarImage from "../userAvatarImage";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const history = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [isnotificationsDrop, setNotificationsDrop] = useState(false);
  
@@ -42,6 +44,14 @@ const Header = () => {
   const handleCloseNotificationsDrop = () => {
     setNotificationsDrop(false);
   };
+  const logout =()=>{
+    localStorage.clear();
+    setAnchorEl(null)
+    alert('Logout successfully')
+    setTimeout(() =>{
+      history('/login')
+    },1000)
+  }
   return (
     <>
       <header className="d-flex align-items-center">
@@ -282,7 +292,7 @@ const Header = () => {
                       </ListItemIcon>
                       Reset Password
                     </MenuItem>
-                    <MenuItem onClick={handleCloseMyAccDrop}>
+                    <MenuItem onClick={logout}>
                       <ListItemIcon>
                         <Logout fontSize="small" />
                       </ListItemIcon>
